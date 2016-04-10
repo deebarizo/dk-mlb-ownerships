@@ -13,7 +13,7 @@ chrome.storage.local.get(null, function(items) { // https://developer.chrome.com
 
     var playerPool = items.playerPool;
 
-    $('div.lineup').each(function() {
+    $('div.lineup.upcoming').each(function() {
 
         var numOfEntries = parseInt($(this).find('div.entries span').text());
 
@@ -23,29 +23,36 @@ chrome.storage.local.get(null, function(items) { // https://developer.chrome.com
 
         tbody.children('tr').each(function() {
 
-            var name = $(this).find('td.p-name').text().trim();
+            var name = $(this).find('td.p-name a').text().trim();
 
-            processPlayer(players, name, lineup, playerPool);
+            var position = $(this).attr('data-pn').trim();
+
+            if (position === 'P') {
+
+                position = 'SP';
+            }
+
+            processPlayer(players, name, position, lineup, playerPool);
         });
 
-        lineup.checkForSecondEventStack(secondEventStacks, lineupBuyIns);
+        lineup.getStack();
 
         lineups.push(lineup);
     });
 
-    var dailyBuyIn = calculateDailyBuyIn(lineups);
+/*    var dailyBuyIn = calculateDailyBuyIn(lineups);
 
     addPercentagesToPlayers(players, lineups, dailyBuyIn);
 
     players.sort(function(a,b) {
 
         return b.percentage - a.percentage;
-    });
+    }); */
 
     chrome.runtime.sendMessage({
      
         method: 'setPlayers',
-        players: players
+        players: [players, lineups]
     });
 });
 
@@ -60,40 +67,46 @@ function Lineup(numOfEntries) {
     this.players = [];
 }
 
-Lineup.prototype.checkForSecondEventStack = function(secondEventStacks, lineupBuyIns) {
+Lineup.prototype.getStack = function() {
 
-    this.playerMatches = 0;
-
-    for (var i = 0; i < secondEventStacks.length; i++) {
-
-        for (var n = 0; n < secondEventStacks[i]['players'].length; n++) {
-
-            this.playerMatches += this.checkForPlayerMatch(secondEventStacks[i]['players'][n], this.players);
-        }
-    }
-
-    if (this.playerMatches == 5) {
-
-        this.buyIn = lineupBuyIns[1];
+    var teams = [];
     
-    } else {
+    for (var i = 0; i < this.players.length; i++) {
+        
+        if (this.players[i]['team'] !== '') {
 
-        this.buyIn = lineupBuyIns[0];
-    }
-};
-
-Lineup.prototype.checkForPlayerMatch = function(playerInStack, playersInLineup) {
-
-    for (var i = 0; i < playersInLineup.length; i++) {
-
-        if (playerInStack['name'] === playersInLineup[i]['name']) {
-
-            return 1;
+            teams.push(this.players[i]['team']);
         }
     }
 
-    return 0;
+    teams = teams.filter(onlyUnique);
+
+    var teamsCount = [];
+
+    for (var i = 0; i < teams.length; i++) {
+        
+        teamsCount[teams[i]] = 0;
+    }
+
+    for (var i = 0; i < this.players.length; i++) {
+        
+        if (this.players[i]['team'] !== '') {
+
+            teamsCount[this.players[i]['team']]++;
+
+            if (teamsCount[this.players[i]['team']] == 5) {
+
+                this.stack = this.players[i]['team'];
+
+                return;
+            }
+        }
+    }
+
+    this.stack = 'None';
 };
+
+
 
 
 /****************************************************************************************
@@ -104,12 +117,19 @@ function Player(name, playerPool) {
 
     this.name = name;
 
-    this.team = this.getTeam(playerPool);
+    this.getMeta(playerPool);
 }
 
-Player.prototype.getTeam = function(playerPool) {
+Player.prototype.getMeta = function(playerPool) {
     
-    
+    for (var i = 0; i < playerPool.length; i++) {
+        
+        if (this.name === playerPool[i]['Name']) {
+
+            this.salary = playerPool[i]['Salary'];
+            this.team = playerPool[i]['teamAbbrev'];
+        }
+    }
 };
 
 
@@ -117,7 +137,7 @@ Player.prototype.getTeam = function(playerPool) {
 HELPERS
 ****************************************************************************************/
 
-function processPlayer(players, name, lineup) {
+function processPlayer(players, name, position, lineup, playerPool) {
 
     var playerProcessed = false;
 
@@ -193,4 +213,9 @@ function getPlayerBuyIn(player, lineups) {
     }
 
     return playerBuyIn;
+}
+
+function onlyUnique(value, index, self) { // http://stackoverflow.com/a/14438954
+
+    return self.indexOf(value) === index;
 }

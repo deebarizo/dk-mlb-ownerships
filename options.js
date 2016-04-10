@@ -91,7 +91,7 @@ function getOptions() {
 			document.getElementById('lineup-buy-in-'+i).value = items.lineupBuyIns[i];
 		}
 
-		if (items.secondEventStacks.length == 0) {
+		if (items.secondEventStacks.length === 0) {
 
 			for (var i = 0; i < 5; i++) {
 
