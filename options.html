@@ -13,8 +13,6 @@
 
 <body>
 
-	<textarea></textarea>
-			
 	<h3><strong>Lineup Buy Ins</strong></h3>
 
 	Event 1: <input type="number" name="lineup-buy-in-0" id="lineup-buy-in-0"><br>
@@ -22,25 +20,15 @@
 
 	<h3><strong>Second Event Stacks</strong></h3>
 
-	<div>
-		<p><strong>Stack 1</strong></p>
+	Team 1: <input type="text" name="team-0" id="team-0"><br>
+	Team 2: <input type="text" name="team-1" id="team-1"><br>
+	Team 3: <input type="text" name="team-2" id="team-2"><br>
+	Team 4: <input type="text" name="team-3" id="team-3"><br>
+	Team 5: <input type="text" name="team-4" id="team-4"><br>
 
-		Player 1: <input type="text" name="stack-0-player-0" id="stack-0-player-0"><br>
-		Player 2: <input type="text" name="stack-0-player-1" id="stack-0-player-1"><br>
-		Player 3: <input type="text" name="stack-0-player-2" id="stack-0-player-2"><br>
-		Player 4: <input type="text" name="stack-0-player-3" id="stack-0-player-3"><br>
-		Player 5: <input type="text" name="stack-0-player-4" id="stack-0-player-4"><br>
-	</div>
+	<h3><strong>CSV Input</strong></h3>
 
-	<div style="margin-top: 0.8em">
-		<p><strong>Stack 2</strong></p>
-
-		Player 1: <input type="text" name="stack-1-player-0" id="stack-1-player-0"><br>
-		Player 2: <input type="text" name="stack-1-player-1" id="stack-1-player-1"><br>
-		Player 3: <input type="text" name="stack-1-player-2" id="stack-1-player-2"><br>
-		Player 4: <input type="text" name="stack-1-player-3" id="stack-1-player-3"><br>
-		Player 5: <input type="text" name="stack-1-player-4" id="stack-1-player-4"><br>
-	</div>
+	<textarea id="csv-input" style="width: 500px; height: 100px"></textarea>
 
 	<div id="status" style="margin-top: 10px"></div>
 	<button id="save" style="margin-top: 10px">Save</button>

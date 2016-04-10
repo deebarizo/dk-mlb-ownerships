@@ -9,32 +9,33 @@ function saveOptions() {
 
 	var secondEventStacks = [];
 
-	for (var i = 0; i < 2; i++) {
+	for (var i = 0; i < 5; i++) {
 
-		var players = [];
+		var teamName = document.getElementById('team-'+i).value.trim();
 
-		for (var n = 0; n < 5; n++) {
-
-			var name = document.getElementById('stack-'+i+'-player-'+n).value.trim();
-
-			var player = new Player(name);
-
-			players.push(player);
-		}		
-
-		var stack = new Stack(players);
+		var stack = new Stack(new Team(teamName));
 
 		secondEventStacks.push(stack);
 	}
 
-	var input = $('textarea').val();
+	var csvInput = $('textarea').val();
 
-	console.log($.csv.toObjects(input));
+	if (csvInput === '') {
+
+		var playerPool = [];
+	
+	} else {
+
+		var playerPool = $.csv.toObjects(csvInput)
+
+		// console.log($.csv.toObjects(csvInput));
+	}
 
 	chrome.storage.sync.set({
 	
 		lineupBuyIns: lineupBuyIns,
-		secondEventStacks: secondEventStacks
+		secondEventStacks: secondEventStacks,
+		playerPool: playerPool
 	
 	}, function() {
 	
@@ -49,19 +50,16 @@ function saveOptions() {
 			document.getElementById('lineup-buy-in-'+i).value = lineupBuyIns[i];
 		}
 
-		for (var i = 0; i < 2; i++) {
-			
-			for (var n = 0; n < 5; n++) {
+		for (var i = 0; i < secondEventStacks.length; i++) {
 
-				var playerName = secondEventStacks[i]['players'][n]['name'];
+			var teamName = secondEventStacks[i]['team']['name'];
 
-				if (playerName === "undefined") {
+			if (teamName === 'undefined') {
 
-					playerName = '';
-				}
+				teamName = '';
+			}
 
-				document.getElementById('stack-'+i+'-player-'+n).value = playerName;
-			}		
+			document.getElementById('team-'+i).value = teamName;
 		}
 
 		status.textContent = 'Options saved.';
@@ -77,7 +75,8 @@ function getOptions() {
 	chrome.storage.sync.get({
 		
 		lineupBuyIns: [3, 27],
-		secondEventStacks: []
+		secondEventStacks: [],
+		playerPool: []
 	
 	}, function(items) {
 
@@ -86,42 +85,38 @@ function getOptions() {
 			document.getElementById('lineup-buy-in-'+i).value = items.lineupBuyIns[i];
 		}
 
-		if (items.secondEventStacks.length === 0) {
+		if (items.secondEventStacks.length == 0) {
 
-			for (var i = 0; i < 2; i++) {
+			for (var i = 0; i < 5; i++) {
 
-				for (var n = 0; n < 5; n++) {
-
-					document.getElementById('stack-'+i+'-player-'+n).value = '';
-				}
+				document.getElementById('team-'+i).value = '';
 			}
 
 		} else {
 
-			for (var i = 0; i < 2; i++) {
+			for (var i = 0; i < items.secondEventStacks.length; i++) {
 
-				for (var n = 0; n < 5; n++) {
+				var teamName = items.secondEventStacks[i]['team']['name'];
 
-					var playerName = items.secondEventStacks[i]['players'][n]['name'];
+				if (teamName === 'undefined') {
 
-					if (playerName === 'undefined') {
-
-						playerName = '';
-					}
-
-					document.getElementById('stack-'+i+'-player-'+n).value = playerName;
+					teamName = '';
 				}
-			}		
+
+				document.getElementById('team-'+i).value = teamName;
+			}
 		}
+
+		console.log(items);
 	});
 }
 
-function Stack(players) {
+function Stack(team) {
 
-	this.players = players;
+	this.team = team;
 }
 
-function Player(name) {
+function Team(name) {
 
 	this.name = name;
 }
