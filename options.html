@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<script src="popup/js/jquery-1.11.3.min.js"></script>
+		<script src="popup/js/jquery-migrate-1.2.1.min.js"></script>
+		<script src="popup/js/jquery.csv.min.js"></script>
+
+		<title>My Test Extension Options</title>
+		<style>
+			body: { padding: 10px; }
+		</style>
+</head>
+
+<body>
+
+	<textarea></textarea>
+			
+	<h3><strong>Lineup Buy Ins</strong></h3>
+
+	Event 1: <input type="number" name="lineup-buy-in-0" id="lineup-buy-in-0"><br>
+	Event 2: <input type="number" name="lineup-buy-in-1" id="lineup-buy-in-1"><br>
+
+	<h3><strong>Second Event Stacks</strong></h3>
+
+	<div>
+		<p><strong>Stack 1</strong></p>
+
+		Player 1: <input type="text" name="stack-0-player-0" id="stack-0-player-0"><br>
+		Player 2: <input type="text" name="stack-0-player-1" id="stack-0-player-1"><br>
+		Player 3: <input type="text" name="stack-0-player-2" id="stack-0-player-2"><br>
+		Player 4: <input type="text" name="stack-0-player-3" id="stack-0-player-3"><br>
+		Player 5: <input type="text" name="stack-0-player-4" id="stack-0-player-4"><br>
+	</div>
+
+	<div style="margin-top: 0.8em">
+		<p><strong>Stack 2</strong></p>
+
+		Player 1: <input type="text" name="stack-1-player-0" id="stack-1-player-0"><br>
+		Player 2: <input type="text" name="stack-1-player-1" id="stack-1-player-1"><br>
+		Player 3: <input type="text" name="stack-1-player-2" id="stack-1-player-2"><br>
+		Player 4: <input type="text" name="stack-1-player-3" id="stack-1-player-3"><br>
+		Player 5: <input type="text" name="stack-1-player-4" id="stack-1-player-4"><br>
+	</div>
+
+	<div id="status" style="margin-top: 10px"></div>
+	<button id="save" style="margin-top: 10px">Save</button>
+
+	<script src="options.js"></script>
+</body>
+</html>
