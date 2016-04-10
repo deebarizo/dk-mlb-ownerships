@@ -1,26 +1,26 @@
 {
-  	"manifest_version": 2,
-  	"name": "DK Ownerships",
-  	"version": "0.1",
-  	
-  	"background": {
+    "manifest_version": 2,
+    "name": "DK Ownerships",
+    "version": "0.1",
+    
+    "background": {
 
-    	"scripts": ["background.js"],
-    	"persistent": false
-  	},
+        "scripts": ["background.js"],
+        "persistent": false
+    },
   
-  	"content_scripts": [
-    	{
-    		"matches": ["https://www.draftkings.com/lineup"],
-      		"js": ["jquery-2.1.4.min.js", "content.js"]
-    	}
-  	],
+    "content_scripts": [
+        {
+            "matches": ["https://www.draftkings.com/lineup"],
+            "js": ["jquery-2.1.4.min.js", "content.js"]
+        }
+    ],
 
-	"browser_action": {
+    "browser_action": {
 
-    	"default_icon": "dk.png",
-    	"default_popup": "popup/popup.html"
-  	},
+        "default_icon": "dk.png",
+        "default_popup": "popup/popup.html"
+    },
 
     "options_ui": {
     
@@ -28,5 +28,8 @@
         "chrome_style": true
     },
 
-    "permissions": ["storage"]
+    "permissions": [
+        "storage",
+        "unlimitedStorage"
+    ]
 }

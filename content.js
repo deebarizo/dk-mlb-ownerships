@@ -1,7 +1,7 @@
 // Chrome Storage API is asynchronous
 // http://stackoverflow.com/questions/16336367/what-is-the-difference-between-synchronous-and-asynchronous-programming-in-node
 
-chrome.storage.sync.get(null, function(items) { // https://developer.chrome.com/extensions/storage#type-StorageArea
+chrome.storage.local.get(null, function(items) { // https://developer.chrome.com/extensions/storage#type-StorageArea
 
     var players = [];
 

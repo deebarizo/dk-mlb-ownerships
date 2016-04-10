@@ -26,12 +26,16 @@ function saveOptions() {
 	
 	} else {
 
-		var playerPool = $.csv.toObjects(csvInput)
+		var playerPool = $.csv.toObjects(csvInput);
 
-		// console.log($.csv.toObjects(csvInput));
+		for (var i = 0; i < playerPool.length; i++) {
+			
+			delete playerPool[i]['AvgPointsPerGame'];
+			delete playerPool[i]['GameInfo'];
+		}
 	}
 
-	chrome.storage.sync.set({
+	chrome.storage.local.set({
 	
 		lineupBuyIns: lineupBuyIns,
 		secondEventStacks: secondEventStacks,
@@ -72,7 +76,7 @@ function saveOptions() {
 
 function getOptions() {
 
-	chrome.storage.sync.get({
+	chrome.storage.local.get({
 		
 		lineupBuyIns: [3, 27],
 		secondEventStacks: [],
