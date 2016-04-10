@@ -2,8 +2,29 @@ chrome.runtime.sendMessage({ method: 'getData' }, function(response) {
   	
   	data = response;
 
+    showErrors(data['errors']);
+
   	drawBarChart(data['players']);
 });
+
+function showErrors(errors) {
+
+    if (errors.length === 0) {
+
+        return;
+    }
+
+    var htmlErrorMessages = '<h4 style="color: red">Errors</h4>';
+
+    for (var i = 0; i < errors.length; i++) {
+        
+        htmlErrorMessages += '<p>'+errors[i]+'</p>';
+    }
+
+    htmlErrorMessages += '<hr>';
+
+    $('div#errors').html(htmlErrorMessages);
+}
 
 function drawBarChart(players) {
 

@@ -58,10 +58,18 @@ chrome.storage.local.get(null, function(items) { // https://developer.chrome.com
 
             lineups: lineups, 
             players: players, 
-            dailyBuyIn: dailyBuyIn
+            dailyBuyIn: dailyBuyIn,
+            errors: errors
         }
     });
 });
+
+
+/****************************************************************************************
+ERRORS
+****************************************************************************************/
+
+var errors = [];
 
 
 /****************************************************************************************
@@ -111,6 +119,22 @@ Lineup.prototype.getStack = function() {
     }
 
     this.stack = 'None';
+
+    var error = 'This lineup does not have a stack: ';
+
+    for (var i = 0; i < this.players.length; i++) {
+
+        if (i === this.players.length - 1) {
+
+            error += this.players[i]['name'];
+
+        } else {
+
+            error += this.players[i]['name']+' | ';
+        }
+    }
+
+    errors.push(error);
 };
 
 Lineup.prototype.getBuyIn = function(secondEventStacks, lineupBuyIns) {
