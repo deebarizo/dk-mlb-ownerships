@@ -11,6 +11,8 @@ chrome.storage.local.get(null, function(items) { // https://developer.chrome.com
 
     var secondEventStacks = items.secondEventStacks;
 
+    var playerPool = items.playerPool;
+
     $('div.lineup').each(function() {
 
         var numOfEntries = parseInt($(this).find('div.entries span').text());
@@ -23,7 +25,7 @@ chrome.storage.local.get(null, function(items) { // https://developer.chrome.com
 
             var name = $(this).find('td.p-name').text().trim();
 
-            processPlayer(players, name, lineup);
+            processPlayer(players, name, lineup, playerPool);
         });
 
         lineup.checkForSecondEventStack(secondEventStacks, lineupBuyIns);
@@ -98,10 +100,17 @@ Lineup.prototype.checkForPlayerMatch = function(playerInStack, playersInLineup) 
 PLAYER
 ****************************************************************************************/
 
-function Player(name) {
+function Player(name, playerPool) {
 
     this.name = name;
+
+    this.team = this.getTeam(playerPool);
 }
+
+Player.prototype.getTeam = function(playerPool) {
+    
+    
+};
 
 
 /****************************************************************************************
@@ -138,7 +147,7 @@ function processPlayer(players, name, lineup) {
         return;
     }
 
-    var player = new Player(name);
+    var player = new Player(name, playerPool);
 
     players.push(player);
 
