@@ -145,7 +145,7 @@ Lineup.prototype.getBuyIn = function(secondEventStacks, lineupBuyIns) {
 
             this.buyIn = lineupBuyIns[1];
 
-            return
+            return;
         }
     }
 
@@ -173,8 +173,16 @@ Player.prototype.getMeta = function(playerPool) {
 
             this.salary = playerPool[i]['Salary'];
             this.team = playerPool[i]['teamAbbrev'];
+
+            return;
         }
     }
+
+    this.team = 'None';
+
+    var error = 'This player does not have a team: '+this.name;
+
+    errors.push(error);    
 };
 
 
