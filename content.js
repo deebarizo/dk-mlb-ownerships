@@ -37,6 +37,8 @@ chrome.storage.local.get(null, function(items) { // https://developer.chrome.com
 
         lineup.getStack();
 
+        lineup.getBuyIn(secondEventStacks, lineupBuyIns);
+
         lineups.push(lineup);
     });
 
@@ -106,7 +108,20 @@ Lineup.prototype.getStack = function() {
     this.stack = 'None';
 };
 
+Lineup.prototype.getBuyIn = function(secondEventStacks, lineupBuyIns) {
+    
+    for (var i = 0; i < secondEventStacks.length; i++) {
+        
+        if (secondEventStacks[i]['team'] === this.stack) {
 
+            this.buyIn = lineupBuyIns[1];
+
+            return
+        }
+    }
+
+    this.buyIn = lineupBuyIns[0];
+};
 
 
 /****************************************************************************************
