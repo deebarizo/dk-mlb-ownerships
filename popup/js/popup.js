@@ -1,8 +1,8 @@
-chrome.runtime.sendMessage({ method: 'getPlayers' }, function(response) {
+chrome.runtime.sendMessage({ method: 'getData' }, function(response) {
   	
-  	players = response;
+  	data = response;
 
-  	drawBarChart(players);
+  	drawBarChart(data['players']);
 });
 
 function drawBarChart(players) {

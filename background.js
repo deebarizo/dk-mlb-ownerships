@@ -1,14 +1,14 @@
 var title;
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-  	if(message.method == 'setPlayers') {
+  	if(message.method == 'setData') {
 
-  		players = message.players;
+  		data = message.data;
   	
-  	} else if(message.method == 'getPlayers') {
+  	} else if(message.method == 'getData') {
 
-    	sendResponse(players);
+    	sendResponse(data);
 
-    	console.log(players);
+    	console.log(data);
   	}
 });

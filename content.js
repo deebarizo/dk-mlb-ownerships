@@ -42,19 +42,24 @@ chrome.storage.local.get(null, function(items) { // https://developer.chrome.com
         lineups.push(lineup);
     });
 
-/*    var dailyBuyIn = calculateDailyBuyIn(lineups);
+    var dailyBuyIn = calculateDailyBuyIn(lineups);
 
     addPercentagesToPlayers(players, lineups, dailyBuyIn);
 
     players.sort(function(a,b) {
 
         return b.percentage - a.percentage;
-    }); */
+    });
 
     chrome.runtime.sendMessage({
      
-        method: 'setPlayers',
-        players: [players, lineups]
+        method: 'setData',
+        data: {
+
+            lineups: lineups, 
+            players: players, 
+            dailyBuyIn: dailyBuyIn
+        }
     });
 });
 
@@ -128,9 +133,10 @@ Lineup.prototype.getBuyIn = function(secondEventStacks, lineupBuyIns) {
 PLAYER
 ****************************************************************************************/
 
-function Player(name, playerPool) {
+function Player(name, position, playerPool) {
 
     this.name = name;
+    this.position = position;
 
     this.getMeta(playerPool);
 }
@@ -139,7 +145,7 @@ Player.prototype.getMeta = function(playerPool) {
     
     for (var i = 0; i < playerPool.length; i++) {
         
-        if (this.name === playerPool[i]['Name']) {
+        if (this.name === playerPool[i]['Name'] && playerPool[i]['Position'].indexOf(this.position) > -1) {
 
             this.salary = playerPool[i]['Salary'];
             this.team = playerPool[i]['teamAbbrev'];
@@ -182,7 +188,7 @@ function processPlayer(players, name, position, lineup, playerPool) {
         return;
     }
 
-    var player = new Player(name, playerPool);
+    var player = new Player(name, position, playerPool);
 
     players.push(player);
 
