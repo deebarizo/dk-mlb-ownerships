@@ -62,6 +62,11 @@ chrome.storage.local.get(null, function(items) { // https://developer.chrome.com
         return b.percentage - a.percentage;
     });
 
+    if (dailyBuyIn != items.dailyBuyInTarget) {
+
+        errors.push('The daily buy in, $'+dailyBuyIn+', does not match the target, $'+items.dailyBuyInTarget+'.');
+    }
+
     chrome.runtime.sendMessage({
      
         method: 'setData',

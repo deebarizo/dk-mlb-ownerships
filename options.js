@@ -1,4 +1,8 @@
 function saveOptions() {
+
+	var dailyBuyInTarget = 0;
+
+	dailyBuyInTarget = parseFloat(document.getElementById('daily-buy-in-target').value.trim());
   
 	var lineupBuyIns = [];
 
@@ -37,6 +41,7 @@ function saveOptions() {
 
 	chrome.storage.local.set({
 	
+		dailyBuyInTarget: dailyBuyInTarget,
 		lineupBuyIns: lineupBuyIns,
 		secondEventStacks: secondEventStacks,
 		playerPool: playerPool,
@@ -49,6 +54,8 @@ function saveOptions() {
 		var status = document.getElementById('status');
 
 		// rewriting fields with trim
+
+		document.getElementById('daily-buy-in-target').value = dailyBuyInTarget;
 
 		for (var i = 0; i < 2; i++) {
 
@@ -79,12 +86,15 @@ function getOptions() {
 
 	chrome.storage.local.get({
 		
+		dailyBuyInTarget: 450, 
 		lineupBuyIns: [3, 27],
 		secondEventStacks: [],
 		playerPool: [],
 		csvInput: ''
 	
 	}, function(items) {
+
+		document.getElementById('daily-buy-in-target').value = items.dailyBuyInTarget;
 
 		for (var i = 0; i < 2; i++) {
 
