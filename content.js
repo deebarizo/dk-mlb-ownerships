@@ -3,9 +3,11 @@
 
 chrome.storage.local.get(null, function(items) { // https://developer.chrome.com/extensions/storage#type-StorageArea
 
+    var lineups = [];
+
     var players = [];
 
-    var lineups = [];
+    var stacks = [];
 
     var lineupBuyIns = items.lineupBuyIns;
 
@@ -39,6 +41,8 @@ chrome.storage.local.get(null, function(items) { // https://developer.chrome.com
 
         lineup.getBuyIn(secondEventStacks, lineupBuyIns);
 
+        processStack(stacks, lineup);
+
         lineups.push(lineup);
     });
 
@@ -51,6 +55,13 @@ chrome.storage.local.get(null, function(items) { // https://developer.chrome.com
         return b.percentage - a.percentage;
     });
 
+    addPercentagesToStacks(stacks, dailyBuyIn);
+
+    stacks.sort(function(a,b) {
+
+        return b.percentage - a.percentage;
+    });
+
     chrome.runtime.sendMessage({
      
         method: 'setData',
@@ -58,6 +69,7 @@ chrome.storage.local.get(null, function(items) { // https://developer.chrome.com
 
             lineups: lineups, 
             players: players, 
+            stacks: stacks,
             dailyBuyIn: dailyBuyIn,
             errors: errors
         }
@@ -111,14 +123,14 @@ Lineup.prototype.getStack = function() {
 
             if (teamsCount[this.players[i]['team']] == 5) {
 
-                this.stack = this.players[i]['team'];
+                this.stack = new Stack(this.players[i]['team']);
 
                 return;
             }
         }
     }
 
-    this.stack = 'None';
+    this.stack = new Stack('None');
 
     var error = 'This lineup does not have a stack: ';
 
@@ -141,7 +153,7 @@ Lineup.prototype.getBuyIn = function(secondEventStacks, lineupBuyIns) {
     
     for (var i = 0; i < secondEventStacks.length; i++) {
         
-        if (secondEventStacks[i]['team'] === this.stack) {
+        if (secondEventStacks[i]['team'] === this.stack['team']) {
 
             this.buyIn = lineupBuyIns[1];
 
@@ -187,12 +199,21 @@ Player.prototype.getMeta = function(playerPool) {
 
 
 /****************************************************************************************
+STACK
+****************************************************************************************/
+
+function Stack(team) {
+
+    this.team = team;
+    this.buyIn = 0;
+}
+
+
+/****************************************************************************************
 HELPERS
 ****************************************************************************************/
 
 function processPlayer(players, name, position, lineup, playerPool) {
-
-    var playerProcessed = false;
 
     if (players.length > 0) {
 
@@ -202,29 +223,38 @@ function processPlayer(players, name, position, lineup, playerPool) {
             
                 lineup.players.push(players[i]);
 
-                playerProcessed = true;
-
-                break;
-            }
-
-            if (playerProcessed) {
-                
-                break;
+                return;
             }
         };  
-
     } 
         
-    if (playerProcessed) {
-
-        return;
-    }
-
     var player = new Player(name, position, playerPool);
 
     players.push(player);
 
     lineup.players.push(player);
+}
+
+function processStack(stacks, lineup) {
+
+    if (stacks.length > 0) {
+
+        for (var i = 0; i < stacks.length; i++) {
+
+            if (lineup['stack']['team'] === stacks[i]['team']) {
+            
+                stacks[i]['buyIn'] += lineup['buyIn'];
+
+                return;
+            }
+        };  
+    } 
+        
+    var stack = new Stack(lineup['stack']['team']);
+
+    stack['buyIn'] += lineup['buyIn'];
+
+    stacks.push(stack);
 }
 
 function calculateDailyBuyIn(lineups) {
@@ -248,6 +278,15 @@ function addPercentagesToPlayers(players, lineups, dailyBuyIn) {
         players[i].percentage = players[i].buyIn / dailyBuyIn * 100;
         players[i].percentage = players[i].percentage.toFixed(2);
     };
+}
+
+function addPercentagesToStacks(stacks, dailyBuyIn) {
+
+    for (var i = 0; i < stacks.length; i++) {
+        
+        stacks[i]['percentage'] = stacks[i]['buyIn'] / dailyBuyIn * 100;
+        stacks[i]['percentage'] = stacks[i]['percentage'].toFixed(2);
+    }
 }
 
 function getPlayerBuyIn(player, lineups) {
