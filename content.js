@@ -257,7 +257,7 @@ function processStack(stacks, lineup) {
         
     var stack = new Stack(lineup['stack']['team']);
 
-    stack['buyIn'] += lineup['buyIn'];
+    stack['buyIn'] += lineup['buyIn'] * lineup['numOfEntries'];
 
     stacks.push(stack);
 }
