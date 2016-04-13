@@ -39,6 +39,8 @@ chrome.storage.local.get(null, function(items) { // https://developer.chrome.com
 
         lineup.getStack();
 
+        $(this).find('div.pmr span').text(lineup.stack.team);
+
         lineup.getBuyIn(secondEventStacks, lineupBuyIns);
 
         processStack(stacks, lineup);
