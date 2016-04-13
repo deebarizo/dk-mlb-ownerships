@@ -250,7 +250,7 @@ function processStack(stacks, lineup) {
 
             if (lineup['stack']['team'] === stacks[i]['team']) {
             
-                stacks[i]['buyIn'] += lineup['buyIn'];
+                stacks[i]['buyIn'] += lineup['buyIn'] * lineup['numOfEntries'];
 
                 return;
             }
