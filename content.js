@@ -15,7 +15,7 @@ chrome.storage.local.get(null, function(items) { // https://developer.chrome.com
 
     var playerPool = items.playerPool;
 
-    $('div.lineup.upcoming').each(function() {
+    $('div.lineup.upcoming, div.lineup.live').each(function() {
 
         var numOfEntries = parseInt($(this).find('div.entries span').text());
 
@@ -26,6 +26,16 @@ chrome.storage.local.get(null, function(items) { // https://developer.chrome.com
         tbody.children('tr').each(function() {
 
             var name = $(this).find('td.p-name a').text().trim();
+
+            if (name === 'J. Hazelbaker') {
+
+                name = 'Jeremy Hazelbaker';
+            }
+
+            if (name === 'J. Hellickson') {
+
+                name = 'Jeremy Hellickson';
+            }
 
             var position = $(this).attr('data-pn').trim();
 
@@ -128,7 +138,7 @@ Lineup.prototype.getStack = function() {
 
             teamsCount[this.players[i]['team']]++;
 
-            if (teamsCount[this.players[i]['team']] == 5) {
+            if (teamsCount[this.players[i]['team']] >= 4) {
 
                 this.stack = new Stack(this.players[i]['team']);
 
