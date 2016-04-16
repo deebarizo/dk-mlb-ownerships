@@ -15,7 +15,7 @@ chrome.storage.local.get(null, function(items) { // https://developer.chrome.com
 
     var playerPool = items.playerPool;
 
-    $('div.lineup.upcoming, div.lineup.live').each(function() {
+    $('div.lineup.upcoming').each(function() {
 
         var numOfEntries = parseInt($(this).find('div.entries span').text());
 
@@ -26,6 +26,21 @@ chrome.storage.local.get(null, function(items) { // https://developer.chrome.com
         tbody.children('tr').each(function() {
 
             var name = $(this).find('td.p-name a').text().trim();
+
+            if (name === 'J. Saltalamac...') {
+
+                name = 'Jarrod Saltalamacchia';
+            }
+
+            if (name === 'F. Cervelli') {
+
+                name = 'Francisco Cervelli';
+            }
+
+            if (name === 'G. Stanton') {
+
+                name = 'Giancarlo Stanton';
+            }
 
             if (name === 'J. Hazelbaker') {
 
