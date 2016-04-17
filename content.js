@@ -15,7 +15,7 @@ chrome.storage.local.get(null, function(items) { // https://developer.chrome.com
 
     var playerPool = items.playerPool;
 
-    $('div.lineup.upcoming').each(function() {
+    $('div.lineup.live').each(function() {
 
         var numOfEntries = parseInt($(this).find('div.entries span').text());
 
@@ -153,7 +153,7 @@ Lineup.prototype.getStack = function() {
 
             teamsCount[this.players[i]['team']]++;
 
-            if (teamsCount[this.players[i]['team']] >= 4) {
+            if (teamsCount[this.players[i]['team']] >= 3) {
 
                 this.stack = new Stack(this.players[i]['team']);
 
