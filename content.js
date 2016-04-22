@@ -130,7 +130,7 @@ Lineup.prototype.getStack = function() {
 
             teamsCount[this.players[i]['team']]++;
 
-            if (teamsCount[this.players[i]['team']] >= 3) {
+            if (teamsCount[this.players[i]['team']] >= 4) {
 
                 this.stack = new Stack(this.players[i]['team']);
 
