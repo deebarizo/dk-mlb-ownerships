@@ -1,15 +1,24 @@
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+chrome.runtime.onConnect.addListener(function(port){
 
-  	if(message.method == 'setData') {
+	port.onMessage.addListener(function(message) {
 
-  		data = message.data;
+	    if (message.method == 'getData' && port.name == 'popupPort') {
 
-  		console.log(data);
-  	
-  	} else if(message.method == 'getData') {
+			chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+			
+			    var activeTab = tabs[0];
+			    
+				var contentPort = chrome.tabs.connect(activeTab.id, {name: 'contentPort'});
 
-    	sendResponse(data);
+    			contentPort.postMessage({ method: 'getData' });
+			});
+	    }
 
-    	console.log(data);
-  	}
+	    if (message.method == 'sendData' && port.name == 'contentPort') {
+
+	    	var popupPort = chrome.runtime.connect({ name: "popupPort" });
+
+	    	popupPort.postMessage({ method: 'sendData', data: message.data });
+	    }
+	});
 });

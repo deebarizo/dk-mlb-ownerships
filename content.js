@@ -1,88 +1,96 @@
-// Chrome Storage API is asynchronous
-// http://stackoverflow.com/questions/16336367/what-is-the-difference-between-synchronous-and-asynchronous-programming-in-node
+var contentPort = chrome.runtime.connect({name: "contentPort"});
 
-chrome.storage.local.get(null, function(items) { // https://developer.chrome.com/extensions/storage#type-StorageArea
+chrome.runtime.onConnect.addListener(function(port){
 
-    var lineups = [];
+    port.onMessage.addListener(function(message) {
 
-    var players = [];
+        if (message.method == 'getData' && port.name == 'contentPort') {
 
-    var stacks = [];
+            chrome.storage.local.get(null, function(items) { // https://developer.chrome.com/extensions/storage#type-StorageArea
 
-    var lineupBuyIns = items.lineupBuyIns;
+                var lineups = [];
 
-    var secondEventStacks = items.secondEventStacks;
+                var players = [];
 
-    var selectorForLineupsToShow = getSelectorForLineupsToShow(items.lineupsToShow);
+                var stacks = [];
 
-    var playerPool = items.playerPool;
+                var lineupBuyIns = items.lineupBuyIns;
 
-    $(selectorForLineupsToShow).each(function() {
+                var secondEventStacks = items.secondEventStacks;
 
-        var numOfEntries = parseInt($(this).find('div.entries span').text());
+                var selectorForLineupsToShow = getSelectorForLineupsToShow(items.lineupsToShow);
 
-        var tbody = $(this).find('table tbody');
+                var playerPool = items.playerPool;
 
-        var lineup = new Lineup(numOfEntries);
+                $(selectorForLineupsToShow).each(function() {
 
-        tbody.children('tr').each(function() {
+                    var numOfEntries = parseInt($(this).find('div.entries span').text());
 
-            var name = $(this).find('td.p-name a').text().trim();
+                    var tbody = $(this).find('table tbody');
 
-            name = fixName(name);
+                    var lineup = new Lineup(numOfEntries);
 
-            var position = $(this).attr('data-pn').trim();
+                    tbody.children('tr').each(function() {
 
-            if (position === 'P') {
+                        var name = $(this).find('td.p-name a').text().trim();
 
-                position = 'SP';
-            }
+                        name = fixName(name);
 
-            processPlayer(players, name, position, lineup, playerPool);
-        });
+                        var position = $(this).attr('data-pn').trim();
 
-        lineup.getStack();
+                        if (position === 'P') {
 
-        $(this).find('div.pmr span').text(lineup.stack.team);
+                            position = 'SP';
+                        }
 
-        lineup.getBuyIn(secondEventStacks, lineupBuyIns);
+                        processPlayer(players, name, position, lineup, playerPool);
+                    });
 
-        processStack(stacks, lineup);
+                    lineup.getStack();
 
-        lineups.push(lineup);
-    });
+                    $(this).find('div.pmr span').text(lineup.stack.team);
 
-    var dailyBuyIn = calculateDailyBuyIn(lineups);
+                    lineup.getBuyIn(secondEventStacks, lineupBuyIns);
 
-    addPercentagesToPlayers(players, lineups, dailyBuyIn);
+                    processStack(stacks, lineup);
 
-    players.sort(function(a,b) {
+                    lineups.push(lineup);
+                });
 
-        return b.percentage - a.percentage;
-    });
+                var dailyBuyIn = calculateDailyBuyIn(lineups);
 
-    addPercentagesToStacks(stacks, dailyBuyIn);
+                addPercentagesToPlayers(players, lineups, dailyBuyIn);
 
-    stacks.sort(function(a,b) {
+                players.sort(function(a,b) {
 
-        return b.percentage - a.percentage;
-    });
+                    return b.percentage - a.percentage;
+                });
 
-    if (dailyBuyIn != items.dailyBuyInTarget) {
+                addPercentagesToStacks(stacks, dailyBuyIn);
 
-        errors.push('The daily buy in, $'+dailyBuyIn+', does not match the target, $'+items.dailyBuyInTarget+'.');
-    }
+                stacks.sort(function(a,b) {
 
-    chrome.runtime.sendMessage({
-     
-        method: 'setData',
-        data: {
+                    return b.percentage - a.percentage;
+                });
 
-            lineups: lineups, 
-            players: players, 
-            stacks: stacks,
-            dailyBuyIn: dailyBuyIn,
-            errors: errors
+                if (dailyBuyIn != items.dailyBuyInTarget) {
+
+                    errors.push('The daily buy in, $'+dailyBuyIn+', does not match the target, $'+items.dailyBuyInTarget+'.');
+                }
+
+                contentPort.postMessage({ 
+
+                    method: 'sendData', 
+                    data: {
+
+                        lineups: lineups, 
+                        players: players, 
+                        stacks: stacks,
+                        dailyBuyIn: dailyBuyIn,
+                        errors: errors
+                    }
+                });
+            });
         }
     });
 });

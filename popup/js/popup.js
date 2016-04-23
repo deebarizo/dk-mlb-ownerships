@@ -1,15 +1,31 @@
-chrome.runtime.sendMessage({ method: 'getData' }, function(response) {
-  	
-  	data = response;
+// When you click the popup icon, the following messages get sent to background.js.
 
-    $('span#daily-buy-in').text(data['dailyBuyIn']);
+var popupPort = chrome.runtime.connect({ name: "popupPort" });
 
-    showErrors(data['errors']);
+popupPort.postMessage({ method: "getData" });
 
-    drawStacksChart(data['stacks']);
 
-  	drawPlayersChart(data['players']);
+// This receives messages from background.js.
+
+chrome.runtime.onConnect.addListener(function(port){
+
+    port.onMessage.addListener(function(message) {
+
+        if (message.method == "sendData" && port.name == 'popupPort') {
+
+            data = message.data;
+
+            $('span#daily-buy-in').text(data['dailyBuyIn']);
+
+            showErrors(data['errors']);
+
+            drawStacksChart(data['stacks']);
+
+            drawPlayersChart(data['players']);
+        }
+    });
 });
+
 
 function showErrors(errors) {
 
