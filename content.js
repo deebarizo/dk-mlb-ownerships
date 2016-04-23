@@ -13,9 +13,11 @@ chrome.storage.local.get(null, function(items) { // https://developer.chrome.com
 
     var secondEventStacks = items.secondEventStacks;
 
+    var selectorForLineupsToShow = getSelectorForLineupsToShow(items.lineupsToShow);
+
     var playerPool = items.playerPool;
 
-    $('div.lineup.live, div.lineup.upcoming').each(function() {
+    $(selectorForLineupsToShow).each(function() {
 
         var numOfEntries = parseInt($(this).find('div.entries span').text());
 
@@ -221,6 +223,29 @@ function Stack(team) {
 /****************************************************************************************
 HELPERS
 ****************************************************************************************/
+
+function getSelectorForLineupsToShow(lineupsToShow) {
+
+    if (lineupsToShow === 'upcoming-and-live') {
+
+        return 'div.lineup.live, div.lineup.upcoming';
+    }
+
+    if (lineupsToShow === 'upcoming') {
+
+        return 'div.lineup.upcoming';
+    }
+
+    if (lineupsToShow === 'live') {
+
+        return 'div.lineup.live';
+    }
+
+    if (lineupsToShow === 'complete') {
+
+        return 'div.lineup.complete';
+    }
+}
 
 function processPlayer(players, name, position, lineup, playerPool) {
 

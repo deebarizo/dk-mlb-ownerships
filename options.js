@@ -39,13 +39,16 @@ function saveOptions() {
 		}
 	}
 
+	var lineupsToShow = $('#lineups-to-show').val();
+
 	chrome.storage.local.set({
 	
 		dailyBuyInTarget: dailyBuyInTarget,
 		lineupBuyIns: lineupBuyIns,
 		secondEventStacks: secondEventStacks,
 		playerPool: playerPool,
-		csvInput: csvInput
+		csvInput: csvInput,
+		lineupsToShow: lineupsToShow
 	
 	}, function() {
 	
@@ -74,6 +77,8 @@ function saveOptions() {
 			document.getElementById('team-'+i).value = teamName;
 		}
 
+		document.getElementById('lineups-to-show').value = lineupsToShow;
+
 		status.textContent = 'Options saved.';
 		setTimeout(function() {
 			status.textContent = '';
@@ -90,7 +95,8 @@ function getOptions() {
 		lineupBuyIns: [3, 27],
 		secondEventStacks: [],
 		playerPool: [],
-		csvInput: ''
+		csvInput: '',
+		lineupsToShow: 'upcoming-and-live'
 	
 	}, function(items) {
 
@@ -125,7 +131,7 @@ function getOptions() {
 
 		document.getElementById('csv-input').value = items.csvInput;
 
-		console.log(items);
+		document.getElementById('lineups-to-show').value = items.lineupsToShow;
 	});
 }
 

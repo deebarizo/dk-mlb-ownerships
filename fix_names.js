@@ -49,6 +49,10 @@ function fixName(name) {
 		{
 			dkName: 'Gio González',
 			batName: 'Gio Gonzalez'
+		},
+		{
+			dkName: 'José Quintana',
+			batName: 'Jose Quintana'
 		}
 	];
 
