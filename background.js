@@ -1,4 +1,5 @@
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+
   	if(message.method == 'setData') {
 
   		data = message.data;
