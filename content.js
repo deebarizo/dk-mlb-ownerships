@@ -151,7 +151,7 @@ Lineup.prototype.getStack = function() {
 
     this.stack = new Stack('None');
 
-    var error = 'This lineup does not have a stack: ';
+    /* var error = 'This lineup does not have a stack: ';
 
     for (var i = 0; i < this.players.length; i++) {
 
@@ -165,7 +165,7 @@ Lineup.prototype.getStack = function() {
         }
     }
 
-    errors.push(error);
+    errors.push(error); */
 };
 
 Lineup.prototype.getBuyIn = function(secondEventStacks, lineupBuyIns) {
@@ -225,6 +225,7 @@ function Stack(team) {
 
     this.team = team;
     this.buyIn = 0;
+    this.numOfEntries = 0;
 }
 
 
@@ -286,6 +287,7 @@ function processStack(stacks, lineup) {
             if (lineup['stack']['team'] === stacks[i]['team']) {
             
                 stacks[i]['buyIn'] += lineup['buyIn'] * lineup['numOfEntries'];
+                stacks[i]['numOfEntries'] += lineup['numOfEntries'];
 
                 return;
             }
@@ -295,6 +297,7 @@ function processStack(stacks, lineup) {
     var stack = new Stack(lineup['stack']['team']);
 
     stack['buyIn'] += lineup['buyIn'] * lineup['numOfEntries'];
+    stack['numOfEntries'] += lineup['numOfEntries'];
 
     stacks.push(stack);
 }

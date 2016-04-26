@@ -54,7 +54,10 @@ function drawStacksChart(stacks) {
     for (var i = 0; i < stacks.length; i++) {
 
         chartStacks.push(stacks[i]['team']);
-        percentages.push(parseFloat(stacks[i]['percentage']));
+        percentages.push({
+            y: parseFloat(stacks[i]['percentage']),
+            val: parseInt(stacks[i]['numOfEntries'])
+        });
     };
 
     var series = [      
@@ -80,7 +83,9 @@ function drawStacksChart(stacks) {
             max: 100
         },
         tooltip: {
-            enabled: false
+            formatter: function() {
+                return 'Number of Entries: '+this.point.val;
+            }
         },
         plotOptions: {
             bar: {
@@ -92,6 +97,12 @@ function drawStacksChart(stacks) {
                 states: {
                     hover: {
                         enabled: false
+                    }
+                },
+                dataLabels:{
+                    enabled:true,
+                    formatter: function() {
+                        return this.y +'%';
                     }
                 }
             }
