@@ -4,59 +4,87 @@ function fixName(name) {
 
 		{
 			dkName: 'Adrián Béltre',
-			batName: 'Adrian Beltre'
+			csvName: 'Adrian Beltre'
 		},
 		{
 			dkName: 'José Altuve',
-			batName: 'Jose Altuve'
+			csvName: 'Jose Altuve'
 		},
 		{
 			dkName: 'M. Bumgarner',
-			batName: 'Madison Bumgarner'
+			csvName: 'Madison Bumgarner'
 		},
 		{
 			dkName: 'F. Liriano',
-			batName: 'Francisco Liriano'
+			csvName: 'Francisco Liriano'
 		},
 		{
 			dkName: 'J. Saltalamac...',
-			batName: 'Jarrod Saltalamacchia'
+			csvName: 'Jarrod Saltalamacchia'
 		},
 		{
 			dkName: 'F. Cervelli',
-			batName: 'Francisco Cervelli'
+			csvName: 'Francisco Cervelli'
 		},
 		{
 			dkName: 'G. Stanton',
-			batName: 'Giancarlo Stanton'
+			csvName: 'Giancarlo Stanton'
 		},
 		{
 			dkName: 'J. Hazelbaker',
-			batName: 'Jeremy Hazelbaker'
+			csvName: 'Jeremy Hazelbaker'
 		},
 		{
 			dkName: 'J. Hellickson',
-			batName: 'Jeremy Hellickson'
+			csvName: 'Jeremy Hellickson'
 		},
 		{
 			dkName: 'Adrián González',
-			batName: 'Adrian Gonzalez'
+			csvName: 'Adrian Gonzalez'
 		},
 		{
 			dkName: 'Carlos González',
-			batName: 'Carlos Gonzalez'
+			csvName: 'Carlos Gonzalez'
 		},
 		{
 			dkName: 'Gio González',
-			batName: 'Gio Gonzalez'
+			csvName: 'Gio Gonzalez'
 		},
 		{
 			dkName: 'José Quintana',
-			batName: 'Jose Quintana'
+			csvName: 'Jose Quintana'
 		},
 		{
 			dkName: 'Grégory Polanco',
-			batName: 'Gregory Polanco'
+			csvName: 'Gregory Polanco'
+		},
+		{
+			dkName: 'E. Encarnación',
+			csvName: 'Edwin Encarnacion'
+		},
+		{
+			dkName: 'José Lobatón',
+			csvName: 'Jose Lobaton'
+		},
+		{
+			dkName: 'Anthony Rendón',
+			csvName: 'Anthony Rendon'
+		},
+		{
+			dkName: 'M. A. Taylor',
+			csvName: 'Michael A. Taylor'
+		},
+		{
+			dkName: 'José Bautista',
+			csvName: 'Jose Bautista'
+		},
+		{
+			dkName: 'José Abreu',
+			csvName: 'Jose Abreu'
+		},
+		{
+			dkName: 'Bartolo Colón',
+			csvName: 'Bartolo Colon'
 		}
 	];
 
@@ -64,7 +92,7 @@ function fixName(name) {
 		
 		if (names[i]['dkName'] === name) {
 
-			return names[i]['batName'];
+			return names[i]['csvName'];
 		}
 	}
 
