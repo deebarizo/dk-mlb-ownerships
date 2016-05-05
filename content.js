@@ -73,6 +73,11 @@ chrome.runtime.onConnect.addListener(function(port) {
                     lineups.push(lineup);
                 });
 
+                lineups.sort(function(a,b) {
+
+                    return a.fpts - b.fpts;
+                });
+
                 var dailyBuyIn = calculateDailyBuyIn(lineups);
 
                 addPercentagesToPlayers(players, lineups, dailyBuyIn);
@@ -214,7 +219,7 @@ Lineup.prototype.getFpts = function() {
         }
     }
 
-    this.fpts = this.fpts.toFixed(2);
+    this.fpts = parseFloat(this.fpts.toFixed(2));
 };
 
 Lineup.prototype.getBuyIn = function(secondEventStacks, lineupBuyIns) {
