@@ -50,7 +50,16 @@ chrome.runtime.onConnect.addListener(function(port){
 
                     errors = lineup.getStack(errors);
 
-                    $(this).find('div.pmr span').text(lineup.stack.team);
+                    if (lineup.stack.teams.length === 1) {
+
+                        $(this).find('div.pmr span').text(lineup.stack.teams[0]);   
+                    
+                    } else {
+
+                        var twoTeamStack = lineup.stack.teams[0]+'/'+lineup.stack.teams[1];
+
+                        $(this).find('div.pmr span').text(twoTeamStack); 
+                    }
 
                     lineup.getBuyIn(secondEventStacks, lineupBuyIns);
 
@@ -58,6 +67,8 @@ chrome.runtime.onConnect.addListener(function(port){
 
                     lineups.push(lineup);
                 });
+
+                console.log(stacks);
 
                 var dailyBuyIn = calculateDailyBuyIn(lineups);
 
@@ -129,6 +140,8 @@ Lineup.prototype.getStack = function(errors) {
         teamsCount[teams[i]] = 0;
     }
 
+    this.stack = new Stack([ 'None' ]);
+
     for (var i = 0; i < this.players.length; i++) {
         
         if (this.players[i]['team'] !== '') {
@@ -137,14 +150,26 @@ Lineup.prototype.getStack = function(errors) {
 
             if (teamsCount[this.players[i]['team']] == 5) {
 
-                this.stack = new Stack(this.players[i]['team']);
+                this.stack = new Stack([ this.players[i]['team'] ]);
+
+                return errors;
+            }
+
+            if (teamsCount[this.players[i]['team']] == 4 && this.stack.teams[0] == 'None' ) {
+
+                this.stack = new Stack([ this.players[i]['team'] ]);
+
+                continue;
+            }
+
+            if (teamsCount[this.players[i]['team']] == 4 && this.stack[0] !== 'None' ) {
+
+                this.stack.teams.push(this.players[i]['team']);
 
                 return errors;
             }
         }
     }
-
-    this.stack = new Stack('None');
 
     var error = 'This lineup does not have a stack: ';
 
@@ -169,7 +194,7 @@ Lineup.prototype.getBuyIn = function(secondEventStacks, lineupBuyIns) {
     
     for (var i = 0; i < secondEventStacks.length; i++) {
         
-        if (secondEventStacks[i]['team'] === this.stack['team']) {
+        if (secondEventStacks[i]['team'] === this.stack.teams[0]) { // To qualify as a second event stack, the stack must be only one team.
 
             this.buyIn = lineupBuyIns[1];
 
@@ -221,9 +246,9 @@ Player.prototype.getMeta = function(playerPool, errors) {
 STACK
 ****************************************************************************************/
 
-function Stack(team) {
+function Stack(teams) { // 1-2 teams, can have 2 teams with 4 players on each team
 
-    this.team = team;
+    this.teams = teams;
     this.buyIn = 0;
     this.numOfEntries = 0;
 }
@@ -282,26 +307,84 @@ function processPlayer(players, name, position, lineup, playerPool, errors) {
 
 function processStack(stacks, lineup) {
 
+    console.log(lineup);
+
+    if (lineup.stack.teams.length === 1) {
+
+        if (stacks.length > 0) {
+
+            for (var i = 0; i < stacks.length; i++) {
+
+                if (lineup.stack.teams[0] === stacks[i]['teams'][0]) {
+
+                    console.log('bob');
+                
+                    stacks[i]['buyIn'] += lineup['buyIn'] * lineup['numOfEntries'];
+                    stacks[i]['numOfEntries'] += lineup['numOfEntries'];
+
+                    return;
+                }
+            }
+        } 
+
+        var stack = new Stack([ lineup.stack.teams[0] ]);
+
+        stack['buyIn'] += lineup['buyIn'] * lineup['numOfEntries'];
+        stack['numOfEntries'] += lineup['numOfEntries'];
+
+        stacks.push(stack);
+
+        return;
+    }
+
+    var teamsAccountedFor = [];
+
     if (stacks.length > 0) {
 
         for (var i = 0; i < stacks.length; i++) {
 
-            if (lineup['stack']['team'] === stacks[i]['team']) {
-            
-                stacks[i]['buyIn'] += lineup['buyIn'] * lineup['numOfEntries'];
-                stacks[i]['numOfEntries'] += lineup['numOfEntries'];
+            for (var n = 0; n < lineup.stack.teams.length; n++) {
+                
+                if (lineup.stack.teams[n] === stacks[i]['team']) {
+                
+                    stacks[i]['buyIn'] += lineup['buyIn'] * lineup['numOfEntries'] * 0.5;
+                    stacks[i]['numOfEntries'] += lineup['numOfEntries'] * 0.5;
 
-                return;
+                    teamsAccountedFor.push(stacks[i]['team']);
+                }
             }
-        };  
+        } 
     } 
+
+    if (teamsAccountedFor.length === 2) {
+
+        return;
+    }
+
+    var teamInStacks = false;
+
+    for (var i = 0; i < lineup.stack.teams.length; i++) {
         
-    var stack = new Stack(lineup['stack']['team']);
+        for (var n = 0; n < teamsAccountedFor.length; n++) {
 
-    stack['buyIn'] += lineup['buyIn'] * lineup['numOfEntries'];
-    stack['numOfEntries'] += lineup['numOfEntries'];
+            if (lineup.stack.teams[i] == teamsAccountedFor[i]) {
 
-    stacks.push(stack);
+                teamInStacks = true;
+            }
+        }
+
+        if (teamInStacks) {
+
+            continue;
+        }
+
+        var stack = new Stack([ lineup.stack.teams[i] ]);
+
+        stack['buyIn'] += lineup['buyIn'] * lineup['numOfEntries'] * 0.5;
+        stack['numOfEntries'] += lineup['numOfEntries'] * 0.5;
+
+        stacks.push(stack);
+    }  
 }
 
 function calculateDailyBuyIn(lineups) {
