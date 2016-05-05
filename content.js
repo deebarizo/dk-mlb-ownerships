@@ -1,12 +1,14 @@
 var contentPort = chrome.runtime.connect({name: "contentPort"});
 
-chrome.runtime.onConnect.addListener(function(port){
+chrome.runtime.onConnect.addListener(function(port) {
 
     port.onMessage.addListener(function(message) {
 
         if (message.method == 'getData' && port.name == 'contentPort') {
 
             chrome.storage.local.get(null, function(items) { // https://developer.chrome.com/extensions/storage#type-StorageArea
+
+                console.log(items);
 
                 var lineups = [];
 

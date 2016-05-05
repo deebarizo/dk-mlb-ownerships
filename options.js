@@ -96,7 +96,8 @@ function getOptions() {
 		secondEventStacks: [],
 		playerPool: [],
 		csvInput: '',
-		lineupsToShow: 'upcoming-and-live'
+		lineupsToShow: 'upcoming-and-live',
+		players: []
 	
 	}, function(items) {
 

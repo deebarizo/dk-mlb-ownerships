@@ -22,3 +22,17 @@ chrome.runtime.onConnect.addListener(function(port){
 	    }
 	});
 });
+
+// http://stackoverflow.com/questions/18835452/chrome-extension-onmessageexternal-undefined
+
+chrome.runtime.onConnectExternal.addListener(function(port) {
+    
+    port.onMessage.addListener(function(message) {
+    
+		chrome.storage.local.set({
+		
+			players: message.players
+
+		}, function() {});
+    });
+});
