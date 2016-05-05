@@ -31,7 +31,7 @@ chrome.runtime.onConnectExternal.addListener(function(port) {
     
 		chrome.storage.local.set({
 		
-			players: message.players
+			batPlayers: message.players
 
 		}, function() {});
     });

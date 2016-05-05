@@ -8,7 +8,7 @@ chrome.runtime.onConnect.addListener(function(port) {
 
             chrome.storage.local.get(null, function(items) { // https://developer.chrome.com/extensions/storage#type-StorageArea
 
-                console.log(items);
+                var batPlayers = items.batPlayers;
 
                 var lineups = [];
 
@@ -25,6 +25,10 @@ chrome.runtime.onConnect.addListener(function(port) {
                 var selectorForLineupsToShow = getSelectorForLineupsToShow(items.lineupsToShow);
 
                 var playerPool = items.playerPool;
+                playerPool = addFptsToPlayerPool(playerPool, batPlayers);
+
+                console.log(playerPool);
+                console.log(batPlayers);
 
                 $(selectorForLineupsToShow).each(function() {
 
@@ -223,12 +227,13 @@ function Player(name, position, playerPool, errors) {
 
     this.name = name;
     this.position = position;
+
     this.errors = errors;
 
     this.getMeta(playerPool);
 }
 
-Player.prototype.getMeta = function(playerPool, errors) {
+Player.prototype.getMeta = function(playerPool) {
     
     for (var i = 0; i < playerPool.length; i++) {
         
@@ -236,6 +241,17 @@ Player.prototype.getMeta = function(playerPool, errors) {
 
             this.salary = playerPool[i]['Salary'];
             this.team = playerPool[i]['teamAbbrev'];
+
+            if (playerPool[i].hasOwnProperty('fpts')) {
+
+                this.fpts = playerPool[i]['fpts'];
+
+            } else {
+
+                var error = 'This player does not have BAT fpts: '+this.name;
+
+                this.errors.push(error);                   
+            }
 
             return;
         }
@@ -288,6 +304,30 @@ function getSelectorForLineupsToShow(lineupsToShow) {
 
         return 'div.lineup.complete';
     }
+}
+
+function addFptsToPlayerPool(playerPool, batPlayers) {
+
+    for (var i = 0; i < playerPool.length; i++) {
+
+        for (var n = 0; n < batPlayers.length; n++) {
+
+            var name = fixBatName(batPlayers[n]['name']);
+
+            var teamAbbrev = fixTeamName(playerPool[i]['teamAbbrev'].toUpperCase());
+            
+            if (playerPool[i]['Name'] == name && 
+                playerPool[i]['Position'].search(batPlayers[n]['position']) > -1 &&
+                teamAbbrev == batPlayers[n]['teamAbbrev'].toUpperCase()) {
+
+                playerPool[i]['fpts'] = batPlayers[n]['fpts'];
+
+                break;
+            }
+        }
+    }
+
+    return playerPool;
 }
 
 function processPlayer(players, name, position, lineup, playerPool, errors) {

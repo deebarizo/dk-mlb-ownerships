@@ -97,7 +97,7 @@ function getOptions() {
 		playerPool: [],
 		csvInput: '',
 		lineupsToShow: 'upcoming-and-live',
-		players: []
+		batPlayers: []
 	
 	}, function(items) {
 

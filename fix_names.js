@@ -7,6 +7,14 @@ function fixName(name) {
 			csvName: 'Adrian Beltre'
 		},
 		{
+			dkName: 'C. Granderson',
+			csvName: 'Curtis Granderson'
+		},
+		{
+			dkName: 'Yoenis Céspedes',
+			csvName: 'Yoenis Cespedes'
+		},
+		{
 			dkName: 'Yasmany Tomás',
 			csvName: 'Yasmany Tomas'
 		},
@@ -147,3 +155,53 @@ function fixName(name) {
 	return name;
 }
 
+function fixBatName(name) {
+
+	var names = [
+
+		{
+			dkName: 'Joe Ross',
+			batName: 'Joseph Ross'
+		}
+	];
+
+	for (var i = 0; i < names.length; i++) {
+		
+		if (names[i]['batName'] === name) {
+
+			return names[i]['dkName'];
+		}
+	}
+
+	return name;	
+}
+
+function fixTeamName(name) {
+
+	var names = [
+
+		{
+			dkName: 'SF',
+			batName: 'SFG'
+		},
+		{
+			dkName: 'SD',
+			batName: 'SDP'
+		},
+		{
+			dkName: 'CWS',
+			batName: 'CHW'
+		},
+		
+	];
+
+	for (var i = 0; i < names.length; i++) {
+		
+		if (names[i]['dkName'] === name) {
+
+			return names[i]['batName'];
+		}
+	}
+
+	return name;
+}
