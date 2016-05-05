@@ -7,6 +7,10 @@ function fixName(name) {
 			csvName: 'Adrian Beltre'
 		},
 		{
+			dkName: 'Yasmany Tomás',
+			csvName: 'Yasmany Tomas'
+		},
+		{
 			dkName: 'José Altuve',
 			csvName: 'Jose Altuve'
 		},

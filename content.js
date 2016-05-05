@@ -68,8 +68,6 @@ chrome.runtime.onConnect.addListener(function(port){
                     lineups.push(lineup);
                 });
 
-                console.log(stacks);
-
                 var dailyBuyIn = calculateDailyBuyIn(lineups);
 
                 addPercentagesToPlayers(players, lineups, dailyBuyIn);
@@ -142,6 +140,8 @@ Lineup.prototype.getStack = function(errors) {
 
     this.stack = new Stack([ 'None' ]);
 
+    var numFourPlayerStacks = 0;
+
     for (var i = 0; i < this.players.length; i++) {
         
         if (this.players[i]['team'] !== '') {
@@ -157,6 +157,8 @@ Lineup.prototype.getStack = function(errors) {
 
             if (teamsCount[this.players[i]['team']] == 4 && this.stack.teams[0] == 'None' ) {
 
+                numFourPlayerStacks++;
+
                 this.stack = new Stack([ this.players[i]['team'] ]);
 
                 continue;
@@ -169,6 +171,11 @@ Lineup.prototype.getStack = function(errors) {
                 return errors;
             }
         }
+    }
+
+    if (numFourPlayerStacks < 2) {
+
+        this.stack = new Stack([ 'None' ]);
     }
 
     var error = 'This lineup does not have a stack: ';
@@ -307,8 +314,6 @@ function processPlayer(players, name, position, lineup, playerPool, errors) {
 
 function processStack(stacks, lineup) {
 
-    console.log(lineup);
-
     if (lineup.stack.teams.length === 1) {
 
         if (stacks.length > 0) {
@@ -317,8 +322,6 @@ function processStack(stacks, lineup) {
 
                 if (lineup.stack.teams[0] === stacks[i]['teams'][0]) {
 
-                    console.log('bob');
-                
                     stacks[i]['buyIn'] += lineup['buyIn'] * lineup['numOfEntries'];
                     stacks[i]['numOfEntries'] += lineup['numOfEntries'];
 

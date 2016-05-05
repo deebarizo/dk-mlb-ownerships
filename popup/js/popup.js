@@ -53,7 +53,7 @@ function drawStacksChart(stacks) {
 
     for (var i = 0; i < stacks.length; i++) {
 
-        chartStacks.push(stacks[i]['team']);
+        chartStacks.push(stacks[i]['teams'][0]);
         percentages.push({
             y: parseFloat(stacks[i]['percentage']),
             val: parseInt(stacks[i]['numOfEntries'])
