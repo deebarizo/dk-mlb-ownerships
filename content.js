@@ -14,6 +14,8 @@ chrome.runtime.onConnect.addListener(function(port){
 
                 var stacks = [];
 
+                var errors = [];
+
                 var lineupBuyIns = items.lineupBuyIns;
 
                 var secondEventStacks = items.secondEventStacks;
@@ -43,10 +45,10 @@ chrome.runtime.onConnect.addListener(function(port){
                             position = 'SP';
                         }
 
-                        processPlayer(players, name, position, lineup, playerPool);
+                        errors = processPlayer(players, name, position, lineup, playerPool, errors);
                     });
 
-                    lineup.getStack();
+                    errors = lineup.getStack(errors);
 
                     $(this).find('div.pmr span').text(lineup.stack.team);
 
@@ -97,13 +99,6 @@ chrome.runtime.onConnect.addListener(function(port){
 
 
 /****************************************************************************************
-ERRORS
-****************************************************************************************/
-
-var errors = [];
-
-
-/****************************************************************************************
 LINEUP
 ****************************************************************************************/
 
@@ -113,7 +108,7 @@ function Lineup(numOfEntries) {
     this.players = [];
 }
 
-Lineup.prototype.getStack = function() {
+Lineup.prototype.getStack = function(errors) {
 
     var teams = [];
     
@@ -140,18 +135,18 @@ Lineup.prototype.getStack = function() {
 
             teamsCount[this.players[i]['team']]++;
 
-            if (teamsCount[this.players[i]['team']] >= 4) {
+            if (teamsCount[this.players[i]['team']] == 5) {
 
                 this.stack = new Stack(this.players[i]['team']);
 
-                return;
+                return errors;
             }
         }
     }
 
     this.stack = new Stack('None');
 
-    /* var error = 'This lineup does not have a stack: ';
+    var error = 'This lineup does not have a stack: ';
 
     for (var i = 0; i < this.players.length; i++) {
 
@@ -165,7 +160,9 @@ Lineup.prototype.getStack = function() {
         }
     }
 
-    errors.push(error); */
+    errors.push(error); 
+
+    return errors;
 };
 
 Lineup.prototype.getBuyIn = function(secondEventStacks, lineupBuyIns) {
@@ -188,15 +185,16 @@ Lineup.prototype.getBuyIn = function(secondEventStacks, lineupBuyIns) {
 PLAYER
 ****************************************************************************************/
 
-function Player(name, position, playerPool) {
+function Player(name, position, playerPool, errors) {
 
     this.name = name;
     this.position = position;
+    this.errors = errors;
 
     this.getMeta(playerPool);
 }
 
-Player.prototype.getMeta = function(playerPool) {
+Player.prototype.getMeta = function(playerPool, errors) {
     
     for (var i = 0; i < playerPool.length; i++) {
         
@@ -213,7 +211,9 @@ Player.prototype.getMeta = function(playerPool) {
 
     var error = 'This player does not have a team: '+this.name;
 
-    errors.push(error);    
+    this.errors.push(error);   
+
+    return; 
 };
 
 
@@ -256,7 +256,7 @@ function getSelectorForLineupsToShow(lineupsToShow) {
     }
 }
 
-function processPlayer(players, name, position, lineup, playerPool) {
+function processPlayer(players, name, position, lineup, playerPool, errors) {
 
     if (players.length > 0) {
 
@@ -266,16 +266,18 @@ function processPlayer(players, name, position, lineup, playerPool) {
             
                 lineup.players.push(players[i]);
 
-                return;
+                return errors;
             }
         };  
     } 
         
-    var player = new Player(name, position, playerPool);
+    var player = new Player(name, position, playerPool, errors);
 
     players.push(player);
 
     lineup.players.push(player);
+
+    return player.errors;
 }
 
 function processStack(stacks, lineup) {

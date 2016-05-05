@@ -85,6 +85,50 @@ function fixName(name) {
 		{
 			dkName: 'Bartolo Colón',
 			csvName: 'Bartolo Colon'
+		},
+		{
+			dkName: 'Eugenio Suárez',
+			csvName: 'Eugenio Suarez'
+		},
+		{
+			dkName: 'Javier Báez',
+			csvName: 'Javier Baez'
+		},
+		{
+			dkName: 'César Vargas',
+			csvName: 'Cesar Vargas'
+		},
+		{
+			dkName: 'S. Strasburg',
+			csvName: 'Stephen Strasburg'
+		},
+		{
+			dkName: 'Robinson Canó',
+			csvName: 'Robinson Cano'
+		},
+		{
+			dkName: 'Félix Hernández',
+			csvName: 'Felix Hernandez'
+		},
+		{
+			dkName: 'Héctor Santiago',
+			csvName: 'Hector Santiago'
+		},
+		{
+			dkName: 'Carlos Beltrán',
+			csvName: 'Carlos Beltran'
+		},
+		{
+			dkName: 'José Fernández',
+			csvName: 'Jose Fernandez'
+		},
+		{
+			dkName: 'Aarón Sánchez',
+			csvName: 'Aaron Sanchez'
+		},
+		{
+			dkName: 'Marwin González',
+			csvName: 'Marwin Gonzalez'
 		}
 	];
 
