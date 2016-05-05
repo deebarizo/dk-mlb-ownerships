@@ -27,9 +27,6 @@ chrome.runtime.onConnect.addListener(function(port) {
                 var playerPool = items.playerPool;
                 playerPool = addFptsToPlayerPool(playerPool, batPlayers);
 
-                console.log(playerPool);
-                console.log(batPlayers);
-
                 $(selectorForLineupsToShow).each(function() {
 
                     var numOfEntries = parseInt($(this).find('div.entries span').text());
@@ -56,13 +53,15 @@ chrome.runtime.onConnect.addListener(function(port) {
 
                     errors = lineup.getStack(errors);
 
+                    lineup.getFpts();
+
                     if (lineup.stack.teams.length === 1) {
 
-                        $(this).find('div.pmr span').text(lineup.stack.teams[0]);   
+                        $(this).find('div.pmr span').text(lineup.stack.teams[0]+' ('+lineup.fpts+')');   
                     
                     } else {
 
-                        var twoTeamStack = lineup.stack.teams[0]+'/'+lineup.stack.teams[1];
+                        var twoTeamStack = lineup.stack.teams[0]+'/'+lineup.stack.teams[1]+' ('+lineup.fpts+')';
 
                         $(this).find('div.pmr span').text(twoTeamStack); 
                     }
@@ -201,6 +200,21 @@ Lineup.prototype.getStack = function(errors) {
     errors.push(error); 
 
     return errors;
+};
+
+Lineup.prototype.getFpts = function() {
+
+    this.fpts = 0;
+    
+    for (var i = 0; i < this.players.length; i++) {
+
+        if (this.players[i].hasOwnProperty('fpts')) {
+            
+            this.fpts += this.players[i]['fpts'];
+        }
+    }
+
+    this.fpts = this.fpts.toFixed(2);
 };
 
 Lineup.prototype.getBuyIn = function(secondEventStacks, lineupBuyIns) {
