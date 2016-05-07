@@ -141,6 +141,22 @@ function fixName(name) {
 		{
 			dkName: 'Marwin González',
 			csvName: 'Marwin Gonzalez'
+		},
+		{
+			dkName: 'W. Castillo',
+			csvName: 'Welington Castillo'
+		},
+		{
+			dkName: 'Héctor Sánchez',
+			csvName: 'Hector Sanchez'
+		},
+		{
+			dkName: 'Salvador Pérez',
+			csvName: 'Salvador Perez'
+		},
+		{
+			dkName: 'C. Vázquez',
+			csvName: 'Christian Vazquez'
 		}
 	];
 
@@ -162,6 +178,14 @@ function fixBatName(name) {
 		{
 			dkName: 'Joe Ross',
 			batName: 'Joseph Ross'
+		},
+		{
+			dkName: 'Jarrod Saltalamacchia',
+			batName: 'Jarrod Saltalamacch...'
+		},
+		{
+			dkName: 'Jung Ho Kang',
+			batName: 'Jung-Ho Kang'
 		}
 	];
 
@@ -192,6 +216,10 @@ function fixTeamName(name) {
 			dkName: 'CWS',
 			batName: 'CHW'
 		},
+		{
+			dkName: 'KC',
+			batName: 'KCR'
+		}
 		
 	];
 

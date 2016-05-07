@@ -12,7 +12,7 @@
     "content_scripts": [
         {
             "matches": ["https://www.draftkings.com/lineup"],
-            "js": ["jquery-2.1.4.min.js", "fix_names.js", "content.js"]
+            "js": ["jquery-2.1.4.min.js", "classes.js", "helpers.js", "fix_names.js", "content.js"]
         }
     ],
 
