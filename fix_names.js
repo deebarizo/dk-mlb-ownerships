@@ -157,6 +157,14 @@ function fixName(name) {
 		{
 			dkName: 'C. Vázquez',
 			csvName: 'Christian Vazquez'
+		},
+		{
+			dkName: 'J.D. Martínez',
+			csvName: 'J.D. Martinez'
+		},
+		{
+			dkName: 'Hernán Pérez',
+			csvName: 'Hernan Perez'
 		}
 	];
 
@@ -176,15 +184,15 @@ function fixBatName(name) {
 	var names = [
 
 		{
-			dkName: 'Joe Ross',
+			dkFixedName: 'Joe Ross',
 			batName: 'Joseph Ross'
 		},
 		{
-			dkName: 'Jarrod Saltalamacchia',
+			dkFixedName: 'Jarrod Saltalamacchia',
 			batName: 'Jarrod Saltalamacch...'
 		},
 		{
-			dkName: 'Jung Ho Kang',
+			dkFixedName: 'Jung Ho Kang',
 			batName: 'Jung-Ho Kang'
 		}
 	];
@@ -193,7 +201,7 @@ function fixBatName(name) {
 		
 		if (names[i]['batName'] === name) {
 
-			return names[i]['dkName'];
+			return names[i]['dkFixedName'];
 		}
 	}
 
@@ -219,8 +227,11 @@ function fixTeamName(name) {
 		{
 			dkName: 'KC',
 			batName: 'KCR'
+		},
+		{
+			dkName: 'TB',
+			batName: 'TBR'
 		}
-		
 	];
 
 	for (var i = 0; i < names.length; i++) {

@@ -18,6 +18,9 @@ chrome.runtime.onConnect.addListener(function(port) {
 
                 var errors = [];
 
+                var showLineupsAfter = items.showLineupsAfter;
+                showLineupsAfter = new Date(Date.parse('2016/01/01 '+showLineupsAfter));
+
                 var lineupCheck = items.lineupCheck;
 
                 var lineupBuyIns = items.lineupBuyIns;
@@ -33,48 +36,55 @@ chrome.runtime.onConnect.addListener(function(port) {
 
                 $(selectorForLineupsToShow).each(function() {
 
-                    var numOfEntries = parseInt($(this).find('div.entries span').text());
+                    var lastEditText = $(this).find('div.last-edit').text();
 
-                    var tbody = $(this).find('table tbody');
+                    var lastEditTime = lastEditText.replace(/(Last Edit: \d+\/\d+\/\d+ )(\d+:\d+ (am|pm))( EST)/, '$2');
+                    lastEditTime = new Date(Date.parse('2016/01/01 '+lastEditTime));
 
-                    var lineup = new Lineup(numOfEntries);
+                    if (lastEditTime > showLineupsAfter) {
+                        var numOfEntries = parseInt($(this).find('div.entries span').text());
 
-                    tbody.children('tr').each(function() {
+                        var tbody = $(this).find('table tbody');
 
-                        var name = $(this).find('td.p-name a').text().trim();
+                        var lineup = new Lineup(numOfEntries);
 
-                        name = fixName(name);
+                        tbody.children('tr').each(function() {
 
-                        var position = $(this).attr('data-pn').trim();
+                            var name = $(this).find('td.p-name a').text().trim();
 
-                        if (position === 'P') {
+                            name = fixName(name);
 
-                            position = 'SP';
+                            var position = $(this).attr('data-pn').trim();
+
+                            if (position === 'P') {
+
+                                position = 'SP';
+                            }
+
+                            errors = processPlayer(players, name, position, lineup, playerPool, errors, lineupCheck);
+                        });
+
+                        errors = lineup.getStack(errors);
+
+                        lineup.getFpts();
+
+                        if (lineup.stack.teams.length === 1) {
+
+                            $(this).find('div.pmr span').text(lineup.stack.teams[0]+' ('+lineup.fpts+')');   
+                        
+                        } else {
+
+                            var twoTeamStack = lineup.stack.teams[0]+'/'+lineup.stack.teams[1]+' ('+lineup.fpts+')';
+
+                            $(this).find('div.pmr span').text(twoTeamStack); 
                         }
 
-                        errors = processPlayer(players, name, position, lineup, playerPool, errors, lineupCheck);
-                    });
+                        lineup.getBuyIn(secondEventStacks, lineupBuyIns);
 
-                    errors = lineup.getStack(errors);
+                        processStack(stacks, lineup);
 
-                    lineup.getFpts();
-
-                    if (lineup.stack.teams.length === 1) {
-
-                        $(this).find('div.pmr span').text(lineup.stack.teams[0]+' ('+lineup.fpts+')');   
-                    
-                    } else {
-
-                        var twoTeamStack = lineup.stack.teams[0]+'/'+lineup.stack.teams[1]+' ('+lineup.fpts+')';
-
-                        $(this).find('div.pmr span').text(twoTeamStack); 
+                        lineups.push(lineup);
                     }
-
-                    lineup.getBuyIn(secondEventStacks, lineupBuyIns);
-
-                    processStack(stacks, lineup);
-
-                    lineups.push(lineup);
                 });
 
                 lineups.sort(function(a,b) {

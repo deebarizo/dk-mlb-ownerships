@@ -41,6 +41,8 @@ function saveOptions() {
 
 	var lineupsToShow = $('#lineups-to-show').val();
 
+	var showLineupsAfter = $('#show-lineups-after').val();
+
 	var lineupCheck = $('#lineup-check').val();
 
 	chrome.storage.local.set({
@@ -51,6 +53,7 @@ function saveOptions() {
 		playerPool: playerPool,
 		csvInput: csvInput,
 		lineupsToShow: lineupsToShow,
+		showLineupsAfter: showLineupsAfter,
 		lineupCheck: lineupCheck
 	
 	}, function() {
@@ -82,6 +85,8 @@ function saveOptions() {
 
 		document.getElementById('lineups-to-show').value = lineupsToShow;
 
+		document.getElementById('show-lineups-after').value = showLineupsAfter;
+
 		document.getElementById('lineup-check').value = lineupCheck;
 
 		status.textContent = 'Options saved.';
@@ -103,6 +108,7 @@ function getOptions() {
 		csvInput: '',
 		lineupsToShow: 'upcoming-and-live',
 		lineupCheck: 'no',
+		showLineupsAfter: '6:00 PM', 
 		batPlayers: []
 	
 	}, function(items) {
@@ -139,6 +145,8 @@ function getOptions() {
 		document.getElementById('csv-input').value = items.csvInput;
 
 		document.getElementById('lineups-to-show').value = items.lineupsToShow;
+
+		document.getElementById('show-lineups-after').value = items.showLineupsAfter;
 
 		document.getElementById('lineup-check').value = items.lineupCheck;
 	});
