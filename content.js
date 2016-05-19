@@ -32,8 +32,6 @@ chrome.runtime.onConnect.addListener(function(port) {
                 var playerPool = items.playerPool;
                 playerPool = addFptsToPlayerPool(playerPool, batPlayers);
 
-                console.log(playerPool);
-
                 $(selectorForLineupsToShow).each(function() {
 
                     var lastEditText = $(this).find('div.last-edit').text();
@@ -64,20 +62,18 @@ chrome.runtime.onConnect.addListener(function(port) {
                             errors = processPlayer(players, name, position, lineup, playerPool, errors, lineupCheck);
                         });
 
-                        errors = lineup.getStack(errors);
+                        errors = lineup.getStacks(errors);
 
-                        lineup.getFpts();
+                        if (lineup.stacks.length === 1) {
 
-                        if (lineup.stack.teams.length === 1) {
-
-                            $(this).find('div.pmr span').text(lineup.stack.teams[0]+' ('+lineup.fpts+')');   
+                            $(this).find('div.pmr span').text(lineup.stacks[0].team);   
                         
                         } else {
 
-                            var twoTeamStack = lineup.stack.teams[0]+'/'+lineup.stack.teams[1]+' ('+lineup.fpts+')';
+                            var twoTeamStack = lineup.stacks[0].team+'/'+lineup.stacks[1].team;
 
                             $(this).find('div.pmr span').text(twoTeamStack); 
-                        }
+                        } 
 
                         lineup.getBuyIn(secondEventStacks, lineupBuyIns);
 

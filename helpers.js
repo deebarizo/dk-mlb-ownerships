@@ -76,13 +76,13 @@ function processPlayer(players, name, position, lineup, playerPool, errors, line
 
 function processStack(stacks, lineup) {
 
-    if (lineup.stack.teams.length === 1) {
+    if (lineup.stacks.length === 1) {
 
         if (stacks.length > 0) {
 
             for (var i = 0; i < stacks.length; i++) {
 
-                if (lineup.stack.teams[0] === stacks[i]['teams'][0]) {
+                if (lineup.stacks[0].team === stacks[i].team) {
 
                     stacks[i]['buyIn'] += lineup['buyIn'] * lineup['numOfEntries'];
                     stacks[i]['numOfEntries'] += lineup['numOfEntries'];
@@ -92,7 +92,7 @@ function processStack(stacks, lineup) {
             }
         } 
 
-        var stack = new Stack([ lineup.stack.teams[0] ]);
+        var stack = new Stack(lineup.stacks[0].team);
 
         stack['buyIn'] += lineup['buyIn'] * lineup['numOfEntries'];
         stack['numOfEntries'] += lineup['numOfEntries'];
@@ -108,17 +108,17 @@ function processStack(stacks, lineup) {
 
         for (var i = 0; i < stacks.length; i++) {
 
-            for (var n = 0; n < lineup.stack.teams.length; n++) {
+            for (var n = 0; n < lineup.stacks.length; n++) {
                 
-                if (lineup.stack.teams[n] === stacks[i]['team']) {
-                
+                if (lineup.stacks[n].team === stacks[i].team) {
+
                     stacks[i]['buyIn'] += lineup['buyIn'] * lineup['numOfEntries'] * 0.5;
                     stacks[i]['numOfEntries'] += lineup['numOfEntries'] * 0.5;
 
-                    teamsAccountedFor.push(stacks[i]['team']);
+                    teamsAccountedFor.push(stacks[i].team);
                 }
             }
-        } 
+        }
     } 
 
     if (teamsAccountedFor.length === 2) {
@@ -128,11 +128,11 @@ function processStack(stacks, lineup) {
 
     var teamInStacks = false;
 
-    for (var i = 0; i < lineup.stack.teams.length; i++) {
+    for (var i = 0; i < lineup.stacks.length; i++) {
         
         for (var n = 0; n < teamsAccountedFor.length; n++) {
 
-            if (lineup.stack.teams[i] == teamsAccountedFor[i]) {
+            if (lineup.stacks[i].team === teamsAccountedFor[n]) {
 
                 teamInStacks = true;
             }
@@ -140,10 +140,12 @@ function processStack(stacks, lineup) {
 
         if (teamInStacks) {
 
+            teamInStacks = false;
+
             continue;
         }
 
-        var stack = new Stack([ lineup.stack.teams[i] ]);
+        var stack = new Stack(lineup.stacks[i].team);
 
         stack['buyIn'] += lineup['buyIn'] * lineup['numOfEntries'] * 0.5;
         stack['numOfEntries'] += lineup['numOfEntries'] * 0.5;

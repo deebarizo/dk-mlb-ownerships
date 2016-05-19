@@ -165,6 +165,22 @@ function fixName(name) {
 		{
 			dkName: 'Hernán Pérez',
 			csvName: 'Hernan Perez'
+		},
+		{
+			dkName: 'César Hernández',
+			csvName: 'Cesar Hernandez'
+		},
+		{
+			dkName: 'I. De Jesús Jr.',
+			csvName: 'Ivan De Jesus Jr.'
+		},
+		{
+			dkName: 'Ramón Cabrera',
+			csvName: 'Ramon Cabrera'
+		},
+		{
+			dkName: 'Jaime García',
+			csvName: 'Jaime Garcia'
 		}
 	];
 
@@ -194,6 +210,14 @@ function fixBatName(name) {
 		{
 			dkFixedName: 'Jung Ho Kang',
 			batName: 'Jung-Ho Kang'
+		},
+		{
+			dkFixedName: 'Ivan De Jesus Jr.',
+			batName: 'Ivan De Jesus'
+		},
+		{
+			dkFixedName: 'Rickie Weeks Jr.',
+			batName: 'Rickie Weeks'
 		}
 	];
 

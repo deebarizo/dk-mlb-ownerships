@@ -5,10 +5,12 @@ LINEUP
 function Lineup(numOfEntries) {
 
     this.numOfEntries = numOfEntries;
+
     this.players = [];
+    this.stacks = [];
 }
 
-Lineup.prototype.getStack = function(errors) {
+Lineup.prototype.getStacks = function(errors) {
 
     var teams = [];
     
@@ -29,44 +31,45 @@ Lineup.prototype.getStack = function(errors) {
         teamsCount[teams[i]] = 0;
     }
 
-    this.stack = new Stack([ 'None' ]);
-
-    var numFourPlayerStacks = 0;
-
     for (var i = 0; i < this.players.length; i++) {
         
         if (this.players[i]['team'] !== '') {
 
             teamsCount[this.players[i]['team']]++;
 
-            if (teamsCount[this.players[i]['team']] == 5) {
+            if (teamsCount[this.players[i]['team']] === 4) {
 
-                this.stack = new Stack([ this.players[i]['team'] ]);
-
-                return errors;
+                this.stacks.push(new Stack(this.players[i]['team'], 4));
             }
 
-            if (teamsCount[this.players[i]['team']] == 4 && this.stack.teams[0] == 'None' ) {
+            if (teamsCount[this.players[i]['team']] === 5) {
 
-                numFourPlayerStacks++;
+                this.stacks = [];
 
-                this.stack = new Stack([ this.players[i]['team'] ]);
-
-                continue;
-            }
-
-            if (teamsCount[this.players[i]['team']] == 4 && this.stack[0] !== 'None' ) {
-
-                this.stack.teams.push(this.players[i]['team']);
-
-                return errors;
+                this.stacks.push(new Stack(this.players[i]['team'], 5));
             }
         }
     }
 
-    if (numFourPlayerStacks < 2) {
+    console.log(this);
 
-        this.stack = new Stack([ 'None' ]);
+    var stackBreakdown = [undefined, undefined];
+
+    for (var i = 0; i < this.stacks.length; i++) {
+        
+        stackBreakdown[i] = this.stacks[i].numOfPlayers;
+    }
+
+    console.log(stackBreakdown);
+
+    if (stackBreakdown[0] === 5 || stackBreakdown[1] === 5) {
+
+        return errors;
+    }
+
+    if (stackBreakdown[0] === 4 && stackBreakdown[1] === 4) {
+
+        return errors;
     }
 
     var error = 'This lineup does not have a stack: ';
@@ -107,7 +110,7 @@ Lineup.prototype.getBuyIn = function(secondEventStacks, lineupBuyIns) {
     
     for (var i = 0; i < secondEventStacks.length; i++) {
         
-        if (secondEventStacks[i]['team'] === this.stack.teams[0]) { // To qualify as a second event stack, the stack must be only one team.
+        if (secondEventStacks[i]['team'] === this.stacks[0].team) { // To qualify as a second event stack, the stack must be only one team.
 
             this.buyIn = lineupBuyIns[1];
 
@@ -155,9 +158,9 @@ Player.prototype.getMeta = function(playerPool, lineupCheck) {
 
             } else {
 
-                var error = 'This player does not have BAT fpts: '+this.name+' ('+this.team+')';
+                // var error = 'This player does not have BAT fpts: '+this.name+' ('+this.team+')';
 
-                this.errors.push(error);                   
+                // this.errors.push(error);                   
             }
 
             return;
@@ -178,9 +181,11 @@ Player.prototype.getMeta = function(playerPool, lineupCheck) {
 STACK
 ****************************************************************************************/
 
-function Stack(teams) { // 1-2 teams, can have 2 teams with 4 players on each team
+function Stack(team, numOfPlayers) { 
 
-    this.teams = teams;
+    this.team = team;
+    this.numOfPlayers = numOfPlayers;
+
     this.buyIn = 0;
     this.numOfEntries = 0;
 }

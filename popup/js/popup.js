@@ -19,7 +19,7 @@ chrome.runtime.onConnect.addListener(function(port){
 
             showErrors(data['errors']);
 
-            showLowestLineupFpts(data['lineups']);
+            // showLowestLineupFpts(data['lineups']);
 
             drawStacksChart(data['stacks']);
 
@@ -48,6 +48,7 @@ function showErrors(errors) {
     $('div#errors').html(htmlErrorMessages);
 }
 
+/*
 function showLowestLineupFpts(lineups) {
 
     var html = '<h4>Lowest Lineup Fpts</h4>';
@@ -61,6 +62,7 @@ function showLowestLineupFpts(lineups) {
 
     $('div#lowest-lineup-fpts').html(html);
 }
+*/
 
 function drawStacksChart(stacks) {
 
@@ -69,10 +71,10 @@ function drawStacksChart(stacks) {
 
     for (var i = 0; i < stacks.length; i++) {
 
-        chartStacks.push(stacks[i]['teams'][0]);
+        chartStacks.push(stacks[i].team);
         percentages.push({
-            y: parseFloat(stacks[i]['percentage']),
-            val: parseInt(stacks[i]['numOfEntries'])
+            y: parseFloat(stacks[i].percentage),
+            val: parseInt(stacks[i].numOfEntries)
         });
     };
 
