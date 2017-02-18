@@ -33,7 +33,7 @@ Lineup.prototype.getStacks = function(errors) {
 
     for (var i = 0; i < this.players.length; i++) {
         
-        if (this.players[i]['team'] !== '') {
+        if (this.players[i]['team'] !== '' && this.players[i]['position'] !== 'SP' && this.players[i]['position'] !== 'RP') {
 
             teamsCount[this.players[i]['team']]++;
 
@@ -51,16 +51,12 @@ Lineup.prototype.getStacks = function(errors) {
         }
     }
 
-    console.log(this);
-
     var stackBreakdown = [undefined, undefined];
 
     for (var i = 0; i < this.stacks.length; i++) {
         
         stackBreakdown[i] = this.stacks[i].numOfPlayers;
     }
-
-    console.log(stackBreakdown);
 
     if (stackBreakdown[0] === 5 || stackBreakdown[1] === 5) {
 
@@ -72,19 +68,19 @@ Lineup.prototype.getStacks = function(errors) {
         return errors;
     }
 
-    var error = 'This lineup does not have a stack: ';
+    this.stacks = [];
 
-    for (var i = 0; i < this.players.length; i++) {
+    this.stacks.push(new Stack('None', 0));
 
-        if (i === this.players.length - 1) {
+    for (var i = 0; i < errors.length; i++) {
+        
+        if (errors[i] = 'There is at least one lineup without a stack. Search for "None".') {
 
-            error += this.players[i]['name'];
-
-        } else {
-
-            error += this.players[i]['name']+' | ';
+            return errors;
         }
     }
+
+    var error = 'There is at least one lineup without a stack. Search for "None".';
 
     errors.push(error); 
 
@@ -158,9 +154,9 @@ Player.prototype.getMeta = function(playerPool, lineupCheck) {
 
             } else {
 
-                // var error = 'This player does not have BAT fpts: '+this.name+' ('+this.team+')';
+                var error = 'This player does not have BAT fpts: '+this.name+' ('+this.team+')';
 
-                // this.errors.push(error);                   
+                this.errors.push(error);                   
             }
 
             return;

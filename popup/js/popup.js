@@ -19,8 +19,6 @@ chrome.runtime.onConnect.addListener(function(port){
 
             showErrors(data['errors']);
 
-            // showLowestLineupFpts(data['lineups']);
-
             drawStacksChart(data['stacks']);
 
             drawPlayersChart(data['players']);
@@ -47,22 +45,6 @@ function showErrors(errors) {
 
     $('div#errors').html(htmlErrorMessages);
 }
-
-/*
-function showLowestLineupFpts(lineups) {
-
-    var html = '<h4>Lowest Lineup Fpts</h4>';
-
-    for (var i = 0; i < 10; i++) {
-        
-        html += '<p>'+lineups[i]['fpts']+'</p>';
-    }
-
-    html += '<hr>';
-
-    $('div#lowest-lineup-fpts').html(html);
-}
-*/
 
 function drawStacksChart(stacks) {
 
@@ -137,60 +119,84 @@ function drawStacksChart(stacks) {
 
 function drawPlayersChart(players) {
 
-	var chartPlayers = [];
-	var percentages = [];
+    var playerTypes = ['pitcher', 'hitter'];
 
-	for (var i = 0; i < players.length; i++) {
+    for (var n = 0; n < playerTypes.length; n++) {
 
-		chartPlayers.push(players[i]['name']);
-		percentages.push(parseFloat(players[i]['percentage']));
-	};
+        var chartPlayers = [];
+        var percentages = [];
 
-	var series = [		
+        console.log(players);
+        
+        for (var i = 0; i < players.length; i++) {
 
-		{ data: percentages }
-	];
+            if (playerTypes[n] === 'pitcher') {
 
-    $('#player-percentages-container').highcharts({
-        chart: {
-            type: 'bar'
-        },
-        title: {
-        	text: null
-        },
-        xAxis: {
-            categories: chartPlayers
-        },
-        yAxis: {
-            min: 0,
-            title: {
-                text: 'Percentage'
+                if (players[i]['position'] === 'SP' || players[i]['position'] === 'RP') {
+
+                    chartPlayers.push(players[i]['name']);
+                    percentages.push(parseFloat(players[i]['percentage']));
+                }
+            }
+
+            if (playerTypes[n] === 'hitter') {
+
+                if (players[i]['position'] !== 'SP' && players[i]['position'] !== 'RP') {
+
+                    chartPlayers.push(players[i]['name']);
+                    percentages.push(parseFloat(players[i]['percentage']));
+                }
+            }    
+        };
+
+        var series = [      
+
+            { data: percentages }
+        ];
+
+        $('#'+playerTypes[n]+'-percentages-container').highcharts({
+            chart: {
+                type: 'bar'
             },
-            max: 100
-        },
-        tooltip: {
-            enabled: false
-        },
-        plotOptions: {
-            bar: {
-                dataLabels: {
-                    enabled: true
+            title: {
+                text: null
+            },
+            xAxis: {
+                categories: chartPlayers
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Percentage'
+                },
+                max: 100
+            },
+            tooltip: {
+                enabled: false
+            },
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                },
+                series: {
+                    states: {
+                        hover: {
+                            enabled: false
+                        }
+                    }
                 }
             },
-            series: {
-            	states: {
-            		hover: {
-            			enabled: false
-            		}
-            	}
+            credits: {
+                enabled: false
+            },
+            series: series,
+            legend: {
+                enabled: false
             }
-        },
-        credits: {
-            enabled: false
-        },
-        series: series,
-        legend: {
-        	enabled: false
-        }
-    });	
+        }); 
+    }
+
+    
 }	

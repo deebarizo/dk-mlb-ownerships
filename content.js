@@ -18,6 +18,8 @@ chrome.runtime.onConnect.addListener(function(port) {
 
                 var errors = [];
 
+                var showLineupsOnThisDate = items.showLineupsOnThisDate;
+
                 var showLineupsAfter = items.showLineupsAfter;
                 showLineupsAfter = new Date(Date.parse('2016/01/01 '+showLineupsAfter));
 
@@ -36,10 +38,12 @@ chrome.runtime.onConnect.addListener(function(port) {
 
                     var lastEditText = $(this).find('div.last-edit').text();
 
+                    var lineupDate = lastEditText.replace(/(Last Edit: )(\d+\/\d+\/\d+ )(\d+:\d+ (am|pm))( EST)/, '$2');
+
                     var lastEditTime = lastEditText.replace(/(Last Edit: \d+\/\d+\/\d+ )(\d+:\d+ (am|pm))( EST)/, '$2');
                     lastEditTime = new Date(Date.parse('2016/01/01 '+lastEditTime));
 
-                    if (lastEditTime > showLineupsAfter) {
+                    if (lastEditTime > showLineupsAfter && (showLineupsOnThisDate === '' || lineupDate.trim() === showLineupsOnThisDate)) {
                         var numOfEntries = parseInt($(this).find('div.entries span').text());
 
                         var tbody = $(this).find('table tbody');
@@ -64,10 +68,12 @@ chrome.runtime.onConnect.addListener(function(port) {
 
                         errors = lineup.getStacks(errors);
 
+                        console.log(lineup);
+
                         if (lineup.stacks.length === 1) {
 
-                            $(this).find('div.pmr span').text(lineup.stacks[0].team);   
-                        
+                            $(this).find('div.pmr span').text(lineup.stacks[0].team); 
+
                         } else {
 
                             var twoTeamStack = lineup.stacks[0].team+'/'+lineup.stacks[1].team;
@@ -88,7 +94,7 @@ chrome.runtime.onConnect.addListener(function(port) {
                     return a.fpts - b.fpts;
                 });
 
-                var dailyBuyIn = calculateDailyBuyIn(lineups);
+                var dailyBuyIn = items.dailyBuyInTarget;
 
                 addPercentagesToPlayers(players, lineups, dailyBuyIn);
 
@@ -104,9 +110,9 @@ chrome.runtime.onConnect.addListener(function(port) {
                     return b.percentage - a.percentage;
                 });
 
-                if (dailyBuyIn != items.dailyBuyInTarget) {
+                if (calculateDailyBuyIn(lineups) != items.dailyBuyInTarget) {
 
-                    errors.push('The daily buy in, $'+dailyBuyIn+', does not match the target, $'+items.dailyBuyInTarget+'.');
+                    errors.push('The daily buy in, $'+calculateDailyBuyIn(lineups)+', does not match the target, $'+items.dailyBuyInTarget+'.');
                 }
 
                 contentPort.postMessage({ 

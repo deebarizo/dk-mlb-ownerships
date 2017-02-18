@@ -3,6 +3,66 @@ function fixName(name) {
 	var names = [
 
 		{
+			dkName: 'Andrés Blanco',
+			csvName: 'Andres Blanco'
+		},
+		{
+			dkName: 'Anibal Sánchez',
+			csvName: 'Anibal Sanchez'
+		},
+		{
+			dkName: 'E. Rodríguez',
+			csvName: 'Eduardo Rodriguez'
+		},
+		{
+			dkName: 'Hanley Ramírez',
+			csvName: 'Hanley Ramirez'
+		},
+		{
+			dkName: 'Julio Urías',
+			csvName: 'Julio Urias'
+		},
+		{
+			dkName: 'Seán Rodríguez',
+			csvName: 'Sean Rodriguez'
+		},
+		{
+			dkName: 'F. Gutiérrez',
+			csvName: 'Franklin Gutierrez'
+		},
+		{
+			dkName: 'Carlos Pérez',
+			csvName: 'Carlos Perez'
+		},
+		{
+			dkName: 'Steven Moyà',
+			csvName: 'Steven Moya'
+		},
+		{
+			dkName: 'Chris Giménez',
+			csvName: 'Chris Gimenez'
+		},
+		{
+			dkName: 'D. Mastroianni',
+			csvName: 'Darin Mastroianni'
+		},
+		{
+			dkName: 'José Ramírez',
+			csvName: 'Jose Ramirez'
+		},
+		{
+			dkName: 'Álex Ávila',
+			csvName: 'Alex Avila'
+		},
+		{
+			dkName: 'Carlos Martínez',
+			csvName: 'Carlos Martinez'
+		},
+		{
+			dkName: 'Carlos Sánchez',
+			csvName: 'Carlos Sanchez'
+		},
+		{
 			dkName: 'Adrián Béltre',
 			csvName: 'Adrian Beltre'
 		},
@@ -181,6 +241,62 @@ function fixName(name) {
 		{
 			dkName: 'Jaime García',
 			csvName: 'Jaime Garcia'
+		},
+		{
+			dkName: 'Eduardo Núñez',
+			csvName: 'Eduardo Nunez'
+		},
+		{
+			dkName: 'L. Chisenhall',
+			csvName: 'Lonnie Chisenhall'
+		},
+		{
+			dkName: 'Leonys Martín',
+			csvName: 'Leonys Martin'
+		},
+		{
+			dkName: 'René Rivera',
+			csvName: 'Rene Rivera'
+		},
+		{
+			dkName: 'José Iglesias',
+			csvName: 'Jose Iglesias'
+		},
+		{
+			dkName: 'Víctor Martínez',
+			csvName: 'Victor Martinez'
+		},
+		{
+			dkName: 'J. Bradley Jr.',
+			csvName: 'Jackie Bradley Jr.'
+		},
+		{
+			dkName: 'Ramón Flores',
+			csvName: 'Ramon Flores'
+		},
+		{
+			dkName: 'Avisail García',
+			csvName: 'Avisail Garcia'
+		},
+		{
+			dkName: 'A. Hechavarria',
+			csvName: 'Adeiny Hechavarria'
+		},
+		{
+			dkName: 'J. Giavotella',
+			csvName: 'Johnny Giavotella'
+		},
+		{
+			dkName: 'Kiké Hernández',
+			csvName: 'Kike Hernandez'
+		},
+		{
+			dkName: 'Y. Solarte',
+			csvName: 'Yangervis Solarte'
+		},
+		{
+			dkName: 'Pedro Álvarez',
+			csvName: 'Pedro Alvarez'
 		}
 	];
 
@@ -218,6 +334,30 @@ function fixBatName(name) {
 		{
 			dkFixedName: 'Rickie Weeks Jr.',
 			batName: 'Rickie Weeks'
+		},
+		{
+			dkFixedName: 'Byung Ho Park',
+			batName: 'Byung-ho Park'
+		},
+		{
+			dkFixedName: 'Mike Bolsinger',
+			batName: 'Michael Bolsinger'
+		},
+		{
+			dkFixedName: 'Jackie Bradley Jr.',
+			batName: 'Jackie Bradley'
+		},
+		{
+			dkFixedName: 'Matt Szczur',
+			batName: 'Matthew Szczur'
+		},
+		{
+			dkFixedName: 'Mike Fiers',
+			batName: 'Michael Fiers'
+		},
+		{
+			dkFixedName: 'Kike Hernandez',
+			batName: 'Enrique Hernandez'
 		}
 	];
 
@@ -255,6 +395,14 @@ function fixTeamName(name) {
 		{
 			dkName: 'TB',
 			batName: 'TBR'
+		},
+		{
+			dkName: 'Sea',
+			batName: 'SEA'
+		},
+		{
+			dkName: 'Mia',
+			batName: 'MIA'
 		}
 	];
 

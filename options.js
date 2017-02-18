@@ -41,6 +41,8 @@ function saveOptions() {
 
 	var lineupsToShow = $('#lineups-to-show').val();
 
+	var showLineupsOnThisDate = $('#show-lineups-on-this-date').val();
+
 	var showLineupsAfter = $('#show-lineups-after').val();
 
 	var lineupCheck = $('#lineup-check').val();
@@ -53,6 +55,7 @@ function saveOptions() {
 		playerPool: playerPool,
 		csvInput: csvInput,
 		lineupsToShow: lineupsToShow,
+		showLineupsOnThisDate: showLineupsOnThisDate,
 		showLineupsAfter: showLineupsAfter,
 		lineupCheck: lineupCheck
 	
@@ -85,6 +88,8 @@ function saveOptions() {
 
 		document.getElementById('lineups-to-show').value = lineupsToShow;
 
+		document.getElementById('show-lineups-on-this-date').value = showLineupsOnThisDate;
+
 		document.getElementById('show-lineups-after').value = showLineupsAfter;
 
 		document.getElementById('lineup-check').value = lineupCheck;
@@ -108,6 +113,7 @@ function getOptions() {
 		csvInput: '',
 		lineupsToShow: 'upcoming-and-live',
 		lineupCheck: 'no',
+		showLineupsOnThisDate: '',
 		showLineupsAfter: '6:00 PM', 
 		batPlayers: []
 	
@@ -145,6 +151,8 @@ function getOptions() {
 		document.getElementById('csv-input').value = items.csvInput;
 
 		document.getElementById('lineups-to-show').value = items.lineupsToShow;
+
+		document.getElementById('show-lineups-on-this-date').value = items.showLineupsOnThisDate;
 
 		document.getElementById('show-lineups-after').value = items.showLineupsAfter;
 
